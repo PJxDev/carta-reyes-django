@@ -11,28 +11,7 @@ from .forms import ProductoForm
 
 # Create your views here.
 def home(request):
-  return render(request, 'home.html')
-
-
-
-def login(request):
-    
-  if(request.method == 'GET'):
-    return render(request, 'login.html', {'form': AuthenticationForm})
-
-  if(request.method == 'POST'):
-    formData = request.POST
-    
-    user = authenticate(request, username=formData['username'], password=formData['password'])
-    if user is None:
-      error = 'Usuario no existe o contraseña incorrecta'
-      return render(request, 'login.html', {'form': AuthenticationForm, 'error' : error})
-    else:        
-      djangoLogin(request, user)
-      return redirect('/')
-    
-    
-    
+  return render(request, 'home.html')  
       
 def registro(request):
   
@@ -58,39 +37,59 @@ def registro(request):
       error = 'Las contraseñas no coinciden'
       return render(request, 'registro.html', {'form': UserCreationForm, 'error' : error})
       
-      
+
+def login(request):
+    
+  if(request.method == 'GET'):
+    return render(request, 'login.html', {'form': AuthenticationForm})
+
+  if(request.method == 'POST'):
+    formData = request.POST
+    
+    user = authenticate(request, username=formData['username'], password=formData['password'])
+    if user is None:
+      error = 'Usuario no existe o contraseña incorrecta'
+      return render(request, 'login.html', {'form': AuthenticationForm, 'error' : error})
+    else:        
+      djangoLogin(request, user)
+      return redirect('/')
+    
+    
 def logout(request):
   djangoLogout(request)
   return redirect('/') 
 
+
+# === ONLY USERS
+
 @login_required
 def editor(request):
-    if(request.method == 'GET'):
-      productos = Producto.objects.filter(user_id = request.user)
-      
-      
-      productos_converted = []
-      for producto in productos:
-
-        productos_converted.append({
-            'id': producto.id,
-            'name': producto.name,
-            'links': (producto.links or []),
-            'has_multiple_links': len(producto.links or []) > 1,
-            'images': (producto.images or []),
-            'has_multiple_images': len(producto.images or []) > 1,
-            'description': producto.description,
-            'created': producto.created,
-            'user_id': producto.user_id.username,
-        })
-      
-      return render(request, 'editor.html', {'form': ProductoForm, 'productos': productos_converted})
+  if(request.method == 'GET'):
+    productos = Producto.objects.filter(user_id = request.user)
+    productos_converted = []
+    
+    for producto in productos:
+      productos_converted.append({
+          'id': producto.id,
+          'name': producto.name,
+          'links': (producto.links or []),
+          'links_cleaned': ((', ').join(producto.links or [])  ),
+          'has_multiple_links': len(producto.links or []) > 1,
+          'images': (producto.images or []),
+          'images_cleaned': ((', ').join(producto.images or [])),
+          'has_multiple_images': len(producto.images or []) > 1,
+          'description': producto.description,
+          'created': producto.created,
+          'user_id': producto.user_id.username,
+      })
+    
+    return render(request, 'editor.html', {'form': ProductoForm, 'productos': productos_converted})
     
     
 @login_required
 def crearProducto(request):
   if(request.method == 'GET'):
-      return redirect('editor') 
+    return redirect('editor') 
     
   if(request.method == 'POST'):
     
@@ -181,24 +180,6 @@ def carta(request, username):
   
   
 @login_required
-def pillar_producto(request, producto_id):
-  if request.method == "POST":  
-      producto = get_object_or_404(Producto, id=producto_id)
-      producto.pillado_user = request.user
-      producto.save()
-      return JsonResponse({"success": True, "nuevo_estado": producto.pillado_user.username})
-  return JsonResponse({"success": False}, status=400)
-
-@login_required
-def despillar_producto(request, producto_id):
-  if request.method == "POST":  
-      producto = get_object_or_404(Producto, id=producto_id)
-      producto.pillado_user = None
-      producto.save()
-      return JsonResponse({"success": True})
-  return JsonResponse({"success": False}, status=400)
-
-@login_required
 def pillados(request):
   try:
     productos = Producto.objects.filter(pillado_user = request.user)
@@ -223,3 +204,32 @@ def pillados(request):
     return render(request, 'pillados.html', {'productos': productos_converted, 'es_author':True})
   except:
     return HttpResponse(f"Usuario no encontrado") 
+  
+  
+#=== API
+  
+@login_required
+def borrar_producto(request, producto_id):
+  if request.method == "POST":  
+      producto = get_object_or_404(Producto, id=producto_id)
+      producto.delete()
+      return JsonResponse({"success": True})
+  return JsonResponse({"success": False}, status=400)
+  
+@login_required
+def pillar_producto(request, producto_id):
+  if request.method == "POST":  
+      producto = get_object_or_404(Producto, id=producto_id)
+      producto.pillado_user = request.user
+      producto.save()
+      return JsonResponse({"success": True})
+  return JsonResponse({"success": False}, status=400)
+
+@login_required
+def despillar_producto(request, producto_id):
+  if request.method == "POST":  
+      producto = get_object_or_404(Producto, id=producto_id)
+      producto.pillado_user = None
+      producto.save()
+      return JsonResponse({"success": True})
+  return JsonResponse({"success": False}, status=400)

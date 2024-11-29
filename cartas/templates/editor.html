@@ -14,14 +14,15 @@
 >
   <h2 class="text-2xl">Carta de {{user.username}}:</h2>
   <section
-    class="grid | grid-cols-1 | gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
+    class="grid | grid-cols-1 | justify-items-center |  gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
   >
     {% for producto in productos %}
     <article
       class="bg-gray-200 | border-slate-300 | border-2 | p-6 | rounded-xl | flex | flex-col | justify-between | gap-4 | w-full | h-full | max-w-xs | relative"
     >
       <button
-        class="bg-yellow-50 | rounded-full | w-12 | h-12 | absolute | top-0 | right-0 | flex justify-center items-center"
+        data-id="{{producto.id}}"
+        class="open_popup_editar bg-yellow-50 | rounded-full | w-12 | h-12 | absolute | top-0 | right-0 | flex justify-center items-center"
       >
         <svg
           version="1.1"
@@ -108,10 +109,10 @@
             </div>
             {% endfor %}
           </div>
-          <button class="prev bg-orange-500 text-zinc-900 font-header">
+          <button class="prev bg-orange-500/50 text-zinc-900 font-header">
             &lt;
           </button>
-          <button class="next bg-orange-500 text-zinc-900 font-header">
+          <button class="next bg-orange-500/50 text-zinc-900 font-header">
             &gt;
           </button>
         </section>
@@ -152,7 +153,10 @@
             <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
           </svg>
         </button>
-        <dialog data-id="{{producto.id}}" class="rounded-lg shadow-md">
+        <dialog
+          data-id="{{producto.id}}"
+          class="dialog_links rounded-lg shadow-md"
+        >
           <div
             class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md"
           >
@@ -296,6 +300,170 @@
         </a>
         {% endif %}
       </div>
+      <dialog
+        data-id="{{producto.id}}"
+        class="dialog_editar rounded-lg shadow-md"
+      >
+        <section
+          class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md"
+        >
+          <form
+            method="POST"
+            class="flex flex-col justify-center items-center gap-4 h-full"
+          >
+            {% csrf_token %}
+
+            <h3 class="text-2xl">EDITAR PRODUCTO</h3>
+
+            <div class="flex flex-col justify-center items-center gap-4">
+              <h2 class="text-red-500 text-xl font-semibold">{{error}}</h2>
+              <label for="id_name">
+                <input
+                  type="text"
+                  name="name"
+                  maxlength="200"
+                  required
+                  id="id_name"
+                  placeholder="Nombre"
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full"
+                  value="{{producto.name}}"
+                />
+              </label>
+              <span class="text-m p-2 w-full bg-amber-100">
+                Introduzca los enlaces de las imágenes y de los productos
+                separados por una &quot; , &quot; en el caso de que sean varios
+                enlaces
+              </span>
+              <label
+                for="id_links"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
+                Enlaces (separados por comas):
+                <textarea
+                  name="links"
+                  cols="40"
+                  rows="10"
+                  id="id_links"
+                  placeholder="https://www..., https://www..., https://www..."
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
+                >{{producto.links_cleaned}}</textarea>
+              </label>
+              <label
+                for="id_images"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
+                Imágenes (separados por comas):
+                <textarea
+                  name="images"
+                  cols="40"
+                  rows="10"
+                  id="id_images"
+                  placeholder="https://www..., https://www..., https://www..."
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
+                >{{producto.images_cleaned}}</textarea>
+              </label>
+              <label
+                for="id_description"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
+                <textarea
+                  name="description"
+                  cols="40"
+                  rows="10"
+                  id="id_description"
+                  placeholder="Descripción"
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full h-24 resize-none"
+                >{{producto.description}}</textarea>
+              </label>
+            </div>
+            <div class="flex flex-row gap-8">
+              <button
+              type="button"
+                onclick="deleteProduct(this.dataset.id)"
+                data-id="{{producto.id}}"
+                class="bg-red-600 p-4 text-white font-semibold rounded-md"
+              >
+                Eliminar
+              </button>
+              <button
+                type="submit"
+                class="bg-green-600 p-4 text-white font-semibold rounded-md"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+
+          <button data-id="{{producto.id}}" class="close_popup_editar absolute right-0 top-0">
+            <svg
+              viewBox="0 0 24 24"
+              width="44"
+              height="44"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="inherit"
+              stroke="inherit"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <title>Close-Circle</title>
+                <g
+                  id="Page-1"
+                  stroke="none"
+                  strokeWidth="1"
+                  fill="none"
+                  fillRule="evenodd"
+                >
+                  <g id="Close-Circle">
+                    <rect
+                      id="Rectangle"
+                      fillRule="nonzero"
+                      x="0"
+                      y="0"
+                      width="24"
+                      height="24"
+                    ></rect>
+                    <circle
+                      id="Oval"
+                      stroke="#e60000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      cx="12"
+                      cy="12"
+                      r="9"
+                    ></circle>
+                    <line
+                      x1="14.1213"
+                      y1="9.87866"
+                      x2="9.8787"
+                      y2="14.1213"
+                      id="Path"
+                      stroke="#e60000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    ></line>
+                    <line
+                      x1="9.87866"
+                      y1="9.87866"
+                      x2="14.1213"
+                      y2="14.1213"
+                      id="Path"
+                      stroke="#e60000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    ></line>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </button>
+        </section>
+      </dialog>
     </article>
     {% endfor %}
   </section>
@@ -347,34 +515,79 @@
 <dialog id="PopupFormAnadirProducto">
   <form
     action="{% url 'crear_producto' %}"
-    class="flex flex-col justify-between items-center gap-6p-4 bg-white rounded-lg shadow-md text-stone-950 relative"
+    class="flex flex-col justify-center items-center gap-4 p-4 max-w-[30rem] h-full"
     method="POST"
   >
     {%csrf_token%}
-
-    <div class="flex flex-col justify-between items-center">
-      <label for="id_name">Nombre:</label>
-      {{ form.name }}
-    </div>
-    <div class="flex flex-col justify-between items-center">
-      <label for="id_links">Enlaces (separados por comas):</label>
-      {{ form.links }}
-      <small>Ejemplo: https://example1.com, https://example2.com</small>
-    </div>
-    <div class="flex flex-col justify-between items-center">
-      <label for="id_images">Imágenes (separadas por comas):</label>
-      {{ form.images }}
-      <small
-        >Ejemplo: https://img1.com/image.jpg, https://img2.com/image.jpg</small
+    <h3 class="text-2xl">AÑADIR PRODUCTO</h3>
+    <div class="flex flex-col justify-center items-center gap-4">
+      <h2 class="text-red-500 text-xl font-semibold">{{error}}</h2>
+      <label for="id_name">
+        <input
+          type="text"
+          name="name"
+          maxlength="200"
+          required
+          id="id_name"
+          placeholder="Nombre"
+          class="bg-slate-200 text-lg p-2 rounded-md w-full"
+        />
+      </label>
+      <span class="text-m p-2 w-full bg-amber-100">
+        Introduzca los enlaces de las imágenes y de los productos separados por
+        una &quot; , &quot; en el caso de que sean varios enlaces
+      </span>
+      <label
+        for="id_links"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
       >
-    </div>
-    <div class="flex flex-col justify-between items-center">
-      <label for="id_description">Descripción:</label>
-      {{ form.description }}
+        Enlaces (separados por comas):
+        <textarea
+          name="links"
+          cols="40"
+          rows="10"
+          id="id_links"
+          placeholder="https://www..., https://www..., https://www..."
+          class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
+        ></textarea>
+      </label>
+      <label
+        for="id_images"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+      >
+        Imágenes (separados por comas):
+        <textarea
+          name="images"
+          cols="40"
+          rows="10"
+          id="id_images"
+          placeholder="https://www..., https://www..., https://www..."
+          class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
+        ></textarea>
+      </label>
+      <label
+        for="id_description"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+      >
+        <textarea
+          name="description"
+          cols="40"
+          rows="10"
+          id="id_description"
+          placeholder="Descripción"
+          class="bg-slate-200 text-lg p-2 rounded-md w-full h-24 resize-none"
+        ></textarea>
+      </label>
     </div>
 
-    <button type="submit">Crear Producto</button>
+    <button
+      type="submit"
+      class="bg-green-600 p-4 text-white font-semibold rounded-md"
+    >
+      Crear Producto
+    </button>
   </form>
+
   <button
     onclick="document.getElementById('PopupFormAnadirProducto').close()"
     class="absolute right-0 top-0"

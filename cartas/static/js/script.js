@@ -4,6 +4,8 @@ const popupFormAnadirProducto = document.querySelector(
 )
 const BotonesOpenPopupLinks = document.querySelectorAll('.open_popup_links')
 const BotonesClosePopupLinks = document.querySelectorAll('.close_popup_links')
+const BotonesOpenPopupEditar = document.querySelectorAll('.open_popup_editar')
+const BotonesClosePopupEditar = document.querySelectorAll('.close_popup_editar')
 const BotonesPillarProducto = document.querySelectorAll('.btn_pillar_producto')
 const BotonesDespillarProducto = document.querySelectorAll(
   '.btn_despillar_producto'
@@ -19,16 +21,40 @@ if (BotonesOpenPopupLinks && BotonesOpenPopupLinks.length > 0) {
   BotonesOpenPopupLinks.forEach((boton) => {
     boton.addEventListener('click', () => {
       let id = boton.dataset.id
-      let popup = document.querySelector(`dialog[data-id="${id}"]`)
+      let popup = document.querySelector(`dialog.dialog_links[data-id="${id}"]`)
       popup.showModal()
     })
   })
 }
+
 if (BotonesClosePopupLinks && BotonesClosePopupLinks.length > 0) {
   BotonesClosePopupLinks.forEach((boton) => {
     boton.addEventListener('click', () => {
       let id = boton.dataset.id
-      let popup = document.querySelector(`dialog[data-id="${id}"]`)
+      let popup = document.querySelector(`dialog.dialog_links[data-id="${id}"]`)
+      popup.close()
+    })
+  })
+}
+if (BotonesOpenPopupEditar && BotonesOpenPopupEditar.length > 0) {
+  BotonesOpenPopupEditar.forEach((boton) => {
+    boton.addEventListener('click', () => {
+      let id = boton.dataset.id
+      let popup = document.querySelector(
+        `dialog.dialog_editar[data-id="${id}"]`
+      )
+      popup.showModal()
+    })
+  })
+}
+
+if (BotonesClosePopupEditar && BotonesClosePopupEditar.length > 0) {
+  BotonesClosePopupEditar.forEach((boton) => {
+    boton.addEventListener('click', () => {
+      let id = boton.dataset.id
+      let popup = document.querySelector(
+        `dialog.dialog_editar[data-id="${id}"]`
+      )
       popup.close()
     })
   })
@@ -51,7 +77,7 @@ if (BotonesPillarProducto && BotonesPillarProducto.length > 0) {
           if (data.success) {
             navigation.reload()
           } else {
-            alert('Hubo un error al cambiar el estado.')
+            alert('Hubo un error al cambiar el estado del producto.')
           }
         })
         .catch((error) => console.error('Error:', error))
@@ -101,7 +127,7 @@ if (BotonesDespillarProducto && BotonesDespillarProducto.length > 0) {
             if (data.success) {
               navigation.reload()
             } else {
-              alert('Hubo un error al cambiar el estado.')
+              alert('Hubo un error al cambiar el estado del producto.')
             }
           })
           .catch((error) => console.error('Error:', error))
@@ -117,6 +143,62 @@ if (BotonesDespillarProducto && BotonesDespillarProducto.length > 0) {
       dialog.showModal()
     })
   })
+}
+
+function deleteProduct(id) {
+  let dialog = document.createElement('dialog')
+  let section = document.createElement('section')
+  let titulo = document.createElement('h2')
+  let text = document.createElement('span')
+  let divBotones = document.createElement('div')
+  let botonConfirmar = document.createElement('button')
+  let botonCancelar = document.createElement('button')
+
+  dialog.classList.add('tipo_confirmacion')
+
+  titulo.textContent = 'MODIFICAR ESTADO'
+  text.textContent = 'Se va a proceder a borrar el producto. ¿Desea proceder?'
+  botonConfirmar.textContent = 'Si'
+  botonCancelar.textContent = 'No'
+
+  // TAILWIND CLASSES
+  dialog.classList.add('bg-orange-100')
+  botonConfirmar.classList.add('bg-emerald-300')
+  botonCancelar.classList.add('bg-red-300')
+
+  botonCancelar.addEventListener('click', () => {
+    dialog.remove()
+  })
+  botonConfirmar.addEventListener('click', () => {
+    const productoId = id
+    const csrfToken = getCookie('csrftoken')
+
+    fetch(`/api/borrar_producto/${productoId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': `${csrfToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          navigation.reload()
+        } else {
+          alert('Hubo un error al borrar el producto.')
+        }
+      })
+      .catch((error) => console.error('Error:', error))
+  })
+
+  divBotones.insertAdjacentElement('beforeend', botonConfirmar)
+  divBotones.insertAdjacentElement('beforeend', botonCancelar)
+  section.insertAdjacentElement('beforeend', titulo)
+  section.insertAdjacentElement('beforeend', text)
+  section.insertAdjacentElement('beforeend', divBotones)
+  dialog.insertAdjacentElement('beforeend', section)
+  document.body.appendChild(dialog)
+  dialog.showModal()
 }
 
 //== CAROUSELS
