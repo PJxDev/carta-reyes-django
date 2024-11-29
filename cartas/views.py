@@ -117,7 +117,7 @@ def crearProducto(request):
       return render(request, 'editor.html', {'form': formData, 'error' : formData.errors})
 
 @login_required
-def editarProducto(request, producto_id):
+def editarProducto(request):
   if(request.method == 'GET'):
       return redirect('editor') 
     
@@ -138,7 +138,7 @@ def editarProducto(request, producto_id):
     formData = ProductoForm(post_data)
     
     if formData.is_valid():
-      producto = get_object_or_404(Producto, id=producto_id)
+      producto = get_object_or_404(Producto, id=post_data['product-id'])
       producto.name = post_data['name']
       producto.description = post_data['description']
       producto.links = post_data['links']
