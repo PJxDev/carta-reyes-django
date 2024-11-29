@@ -1,12 +1,42 @@
 {% extends "layout.html" %} {% block content %}
-<h1 class="text-3xl font-bold underline">Registro</h1>
-<div>
-  <span class="text-red-500 text-xl font-bold">{{error}}</span>
-</div>
 
-<form method="POST">
-  {% csrf_token %} {{ form.as_div }}
-  <button>Registrarse</button>
+<form method="POST" class='flex flex-col justify-center items-center gap-4'>
+  {% csrf_token %} 
+  <div class="flex flex-col justify-center items-center gap-4">
+  <h2 class="text-red-500 text-xl font-semibold">{{error}}</h2>
+    <label for="username"
+      >
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="Usuario"
+        class="bg-slate-200 text-xl p-2 rounded-md"
+      />
+    </label>
+    <label for="password1"
+      >
+      <input
+        type="password"
+        name="password1"
+        id="password1"
+        placeholder="Contraseña"
+        class="bg-slate-200 text-xl p-2 rounded-md"
+      />
+    </label>
+    <label for="password2"
+      >
+      <input
+        type="password"
+        name="password2"
+        id="password2"
+        placeholder="Confirme Contraseña"
+        class="bg-slate-200 text-xl p-2 rounded-md"
+      />
+    </label>
+  </div>
+  <button class=' bg-blue-600 p-4 text-white font-semibold rounded-md'>Registrarse</button>
 </form>
+
 
 {% endblock %}
