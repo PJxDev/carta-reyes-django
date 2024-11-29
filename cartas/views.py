@@ -69,14 +69,18 @@ def editor(request):
     productos_converted = []
     
     for producto in productos:
+      print(producto.links)
+      print('\n')
+      print((', ').join(producto.links or []))
+      print('\n')
       productos_converted.append({
           'id': producto.id,
           'name': producto.name,
           'links': (producto.links or []),
-          'links_cleaned': ((', ').join(producto.links or [])  ),
+          'links_cleaned': (', ').join(producto.links or []),
           'has_multiple_links': len(producto.links or []) > 1,
           'images': (producto.images or []),
-          'images_cleaned': ((', ').join(producto.images or [])),
+          'images_cleaned': (', ').join(producto.images or []),
           'has_multiple_images': len(producto.images or []) > 1,
           'description': producto.description,
           'created': producto.created,

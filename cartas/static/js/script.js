@@ -44,6 +44,34 @@ if (BotonesOpenPopupEditar && BotonesOpenPopupEditar.length > 0) {
         `dialog.dialog_editar[data-id="${id}"]`
       )
       popup.showModal()
+
+      let linksTextarea = popup.querySelector('textarea[name="links"]')
+      let inputLinks = popup.querySelector('#input_link_links')
+      let imagesTextarea = popup.querySelector('textarea[name="images"]')
+      let inputImages = popup.querySelector('#input_link_images')
+
+      if (linksTextarea.textContent !== '') {
+        let value = linksTextarea.textContent
+        linksTextarea.textContent = ''
+
+        let arrayLinks = value.split(', ')
+        arrayLinks.forEach(link => {
+          inputLinks.value = link
+          insertLink(inputLinks)
+        })
+        inputLinks.value = ''
+      }
+      if (imagesTextarea.textContent !== '') {
+        let value = imagesTextarea.textContent
+        imagesTextarea.textContent = ''
+
+        let arrayLinks = value.split(', ')
+        arrayLinks.forEach((link) => {
+          inputImages.value = link
+          insertImage(inputImages)
+        })
+        inputImages.value = ''
+      }
     })
   })
 }
@@ -243,4 +271,97 @@ function getCookie(name) {
     }
   }
   return cookieValue
+}
+
+
+//== INSERT LINKS AND IMAGES
+
+function insertImage(input) { 
+  let link = input.value
+  let parentInputLink = input.parentElement.parentElement
+  let textAreaLinks = parentInputLink.querySelector('#id_images')
+  let wrapper = input.parentElement.nextElementSibling
+
+  let newDiv = document.createElement('div')
+  let newImg = document.createElement('img')
+  let removeButton = document.createElement('button')
+  newImg.src = link
+  removeButton.type = 'button'
+  removeButton.innerHTML = '&times;'
+
+  // TAILWINDCSS
+  newImg.classList.add('object-cover')
+  newImg.classList.add('w-[5rem]')
+  newImg.classList.add('h-[5rem]')
+
+  if (textAreaLinks.textContent === '') {
+    textAreaLinks.textContent += link
+  } else {
+    textAreaLinks.textContent += `, ${link}`
+  }
+
+  removeButton.addEventListener('click', () => {
+    newDiv.remove()
+    let valueTextArea = textAreaLinks.textContent.split(', ')
+
+    if (valueTextArea.includes(link)) {
+      valueTextArea = valueTextArea.filter((el) => el !== link)
+      textAreaLinks.textContent = valueTextArea.join(', ')
+    }
+  })
+
+  newDiv.appendChild(newImg)
+  newDiv.appendChild(removeButton)
+  wrapper.appendChild(newDiv)
+  input.value = ''
+}
+function insertLink(input) {
+  let link = input.value
+  let parentInputLink = input.parentElement.parentElement
+  let textAreaLinks = parentInputLink.querySelector('#id_links')
+  let wrapper = input.parentElement.nextElementSibling
+
+  let newDiv = document.createElement('div')  
+  let newImg = document.createElement('img')
+  let newSpan = document.createElement('span')
+  let removeButton = document.createElement('button')
+  let domain = new URL(link).hostname
+  let partsDomain = domain.split('.')
+  newImg.src = `https://${domain}/favicon.ico`
+  newSpan.textContent = partsDomain.slice(-2).join('.')
+
+  removeButton.type = 'button'
+  removeButton.innerHTML = '&times;'
+
+  // TAILWINDCSS
+  newDiv.classList.add('flex')
+  newDiv.classList.add('flex-col')
+  newDiv.classList.add('justify-center')
+  newDiv.classList.add('items-center')
+  newSpan.classList.add('text-lg')
+  newImg.classList.add('object-cover')
+  newImg.classList.add('w-[5rem]')
+  newImg.classList.add('h-[5rem]')
+
+  if (textAreaLinks.textContent === '') {
+    textAreaLinks.textContent += link
+  } else {
+    textAreaLinks.textContent += `, ${link}`
+  }
+
+  removeButton.addEventListener('click', () => {
+    newDiv.remove()
+    let valueTextArea = textAreaLinks.textContent.split(', ')
+
+    if (valueTextArea.includes(link)) {
+      valueTextArea = valueTextArea.filter((el) => el !== link)
+      textAreaLinks.textContent = valueTextArea.join(', ')
+    }
+  })
+
+  newDiv.appendChild(newImg)
+  newDiv.appendChild(newSpan)
+  newDiv.appendChild(removeButton)
+  wrapper.appendChild(newDiv)
+  input.value = ''
 }

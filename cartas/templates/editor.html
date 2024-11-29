@@ -14,7 +14,7 @@
 >
   <h2 class="text-2xl">Carta de {{user.username}}:</h2>
   <section
-    class="grid | grid-cols-1 | justify-items-center |  gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
+    class="grid | grid-cols-1 | justify-items-center | gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
   >
     {% for producto in productos %}
     <article
@@ -308,18 +308,27 @@
           class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md"
         >
           <form
-          action="{% url 'editar_producto' %}"
-          method="POST"
+            action="{% url 'editar_producto' %}"
+            method="POST"
             class="flex flex-col justify-center items-center gap-4 h-full"
           >
             {% csrf_token %}
-            <input name='product-id' type="text" readonly hidden value="{{producto.id}}">
+            <input
+              name="product-id"
+              type="text"
+              readonly
+              hidden
+              value="{{producto.id}}"
+            />
 
             <h3 class="text-2xl">EDITAR PRODUCTO</h3>
 
             <div class="flex flex-col justify-center items-center gap-4">
               <h2 class="text-red-500 text-xl font-semibold">{{error}}</h2>
-              <label for="id_name">
+              <label
+                for="id_name"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
                 <input
                   type="text"
                   name="name"
@@ -331,17 +340,14 @@
                   value="{{producto.name}}"
                 />
               </label>
-              <span class="text-m p-2 w-full bg-amber-100">
-                Introduzca los enlaces de las imágenes y de los productos
-                separados por una &quot; , &quot; en el caso de que sean varios
-                enlaces
-              </span>
+
               <label
                 for="id_links"
                 class="flex flex-col justify-between items-center text-lg pt-2 w-full"
               >
                 Enlaces (separados por comas):
                 <textarea
+                  hidden
                   name="links"
                   cols="40"
                   rows="10"
@@ -351,11 +357,26 @@
                 >{{producto.links_cleaned}}</textarea>
               </label>
               <label
+                for="input_link_links"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
+                <input
+                  type="text"
+                  id="input_link_links"
+                  placeholder="Pega aquí tu enlace"
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full"
+                  onchange="insertLink(this)"
+                />
+              </label>
+              <div class="links_wrapper flex flex-wrap gap-2">
+              </div>
+              <label
                 for="id_images"
                 class="flex flex-col justify-between items-center text-lg pt-2 w-full"
               >
                 Imágenes (separados por comas):
                 <textarea
+                  hidden
                   name="images"
                   cols="40"
                   rows="10"
@@ -364,6 +385,19 @@
                   class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
                 >{{producto.images_cleaned}}</textarea>
               </label>
+              <label
+                for="input_link_images"
+                class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+              >
+                <input
+                  type="text"
+                  id="input_link_images"
+                  placeholder="Pega aquí tu enlace"
+                  class="bg-slate-200 text-lg p-2 rounded-md w-full"
+                  onchange="insertImage(this)"
+                />
+              </label>
+              <div class="imgs_wrapper flex flex-wrap gap-2"></div>
               <label
                 for="id_description"
                 class="flex flex-col justify-between items-center text-lg pt-2 w-full"
@@ -380,7 +414,7 @@
             </div>
             <div class="flex flex-row gap-8">
               <button
-              type="button"
+                type="button"
                 onclick="deleteProduct(this.dataset.id)"
                 data-id="{{producto.id}}"
                 class="bg-red-600 p-4 text-white font-semibold rounded-md"
@@ -396,7 +430,10 @@
             </div>
           </form>
 
-          <button data-id="{{producto.id}}" class="close_popup_editar absolute right-0 top-0">
+          <button
+            data-id="{{producto.id}}"
+            class="close_popup_editar absolute right-0 top-0"
+          >
             <svg
               viewBox="0 0 24 24"
               width="44"
@@ -524,7 +561,10 @@
     <h3 class="text-2xl">AÑADIR PRODUCTO</h3>
     <div class="flex flex-col justify-center items-center gap-4">
       <h2 class="text-red-500 text-xl font-semibold">{{error}}</h2>
-      <label for="id_name">
+      <label
+        for="id_name"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+      >
         <input
           type="text"
           name="name"
@@ -535,16 +575,14 @@
           class="bg-slate-200 text-lg p-2 rounded-md w-full"
         />
       </label>
-      <span class="text-m p-2 w-full bg-amber-100">
-        Introduzca los enlaces de las imágenes y de los productos separados por
-        una &quot; , &quot; en el caso de que sean varios enlaces
-      </span>
+
       <label
         for="id_links"
         class="flex flex-col justify-between items-center text-lg pt-2 w-full"
       >
-        Enlaces (separados por comas):
+        Enlaces:
         <textarea
+          hidden
           name="links"
           cols="40"
           rows="10"
@@ -554,11 +592,27 @@
         ></textarea>
       </label>
       <label
+        for="input_link_links"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+      >
+        <input
+          type="text"
+          id="input_link_links"
+          placeholder="Pega aquí tu enlace"
+          class="bg-slate-200 text-lg p-2 rounded-md w-full"
+          onchange="insertLink(this)"
+        />
+      </label>
+      <div class="links_wrapper flex flex-wrap gap-2"></div>
+
+      <label
+        hidden
         for="id_images"
         class="flex flex-col justify-between items-center text-lg pt-2 w-full"
       >
-        Imágenes (separados por comas):
+        Imágenes:
         <textarea
+          hidden
           name="images"
           cols="40"
           rows="10"
@@ -567,6 +621,19 @@
           class="bg-slate-200 text-lg p-2 rounded-md w-full h-32 resize-none"
         ></textarea>
       </label>
+      <label
+        for="input_link_images"
+        class="flex flex-col justify-between items-center text-lg pt-2 w-full"
+      >
+        <input
+          type="text"
+          id="input_link_images"
+          placeholder="Pega aquí tu enlace"
+          class="bg-slate-200 text-lg p-2 rounded-md w-full"
+          onchange="insertImage(this)"
+        />
+      </label>
+      <div class="imgs_wrapper flex flex-wrap gap-2"></div>
       <label
         for="id_description"
         class="flex flex-col justify-between items-center text-lg pt-2 w-full"
