@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', views.login, name = 'login'),
     path('<str:username>', views.carta, name='carta'),
     path('logout/', views.logout, name = 'logout'),
+    path('pillados/', views.pillados, name = 'pillados'),
     path('editor/', views.editor, name = 'editor'),
     path('editor/crear_producto', views.crearProducto, name='crear_producto'),
     path('api/pillar_producto/<int:producto_id>/', views.pillar_producto, name='pillar_producto_api'),
