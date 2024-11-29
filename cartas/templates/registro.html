@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block content %}
+<h1 class="text-3xl font-bold underline">Registro</h1>
+<div>
+  <span class="text-red-500 text-xl font-bold">{{error}}</span>
+</div>
+
+<form method="POST">
+  {% csrf_token %} {{ form.as_div }}
+  <button>Registrarse</button>
+</form>
+
+{% endblock %}

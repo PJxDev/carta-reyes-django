@@ -1,0 +1,450 @@
+{% extends "layout.html" %} {%block content%}
+
+<section class="p-7 | flex | flex-col | justify-center | items-center">
+  <h3
+    class="bg-amber-100 | text-gray-900 | rounded-lg | p-7 | text-xl | font-semibold | text-center | shadow-xl"
+  >
+    Este año he intentado portarme súper bien y, aunque ya habéis hecho parte de
+    vuestra magia por la suerte que he tenido, os querría pedir un par de
+    cosillas más ...
+  </h3>
+</section>
+<section
+  class="bg-emerald-100/75 | min-w-full | text-black | p-7 | flex | flex-1 | flex-col | gap-4 | justify-center | items-center"
+>
+  <h2 class="text-2xl">Carta de {{user.username}}:</h2>
+  <section
+    class="grid | grid-cols-1 | gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
+  >
+    {% for producto in productos %}
+    <article
+      class="bg-gray-200 | border-slate-300 | border-2 | p-6 | rounded-xl | flex | flex-col | justify-between | gap-4 | w-full | h-full | max-w-xs | relative"
+    >
+      <button
+        class="bg-yellow-50 | rounded-full | w-12 | h-12 | absolute | top-0 | right-0 | flex justify-center items-center"
+      >
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512.001 512.001"
+          fill="#000000"
+          class="w-8 h-8"
+        >
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              style="fill: #ffbd42"
+              d="M33.052,356.136l-0.822,0.822l0,0L0.613,485.716c-1.77,7.209,0.355,14.819,5.604,20.068 l88.242-88.242L33.052,356.136z"
+            ></path>
+            <path
+              style="fill: #ffec1f"
+              d="M502.599,86.817L425.182,9.402c-12.536-12.536-32.86-12.536-45.396,0L311.18,78.008l-10.078,10.078 L32.23,356.957l0,0L0.613,485.716c-1.77,7.209,0.355,14.819,5.604,20.068c5.249,5.249,12.858,7.374,20.068,5.604l128.759-31.617l0,0 l268.873-268.873l10.078-10.078l68.606-68.606C515.135,119.677,515.135,99.353,502.599,86.817z"
+            ></path>
+            <path
+              style="fill: #007066"
+              d="M425.182,9.402c-12.536-12.536-32.86-12.536-45.396,0L311.18,78.008l-10.078,10.078L32.23,356.957 l0,0L0.613,485.716c-1.77,7.209,0.355,14.819,5.604,20.068L463.891,48.11L425.182,9.402z"
+            ></path>
+            <path
+              style="fill: #2c3e3f"
+              d="M425.182,9.402c-12.536-12.536-32.86-12.536-45.396,0L311.18,78.008l-10.078,10.078L32.23,356.957 l0,0L0.613,485.716c-1.77,7.209,0.355,14.819,5.604,20.068L463.891,48.11L425.182,9.402z"
+            ></path>
+            <path
+              style="fill: #940009"
+              d="M466.265,168.547l36.334-36.334c12.536-12.536,12.536-32.86,0-45.396L425.182,9.402 c-12.536-12.536-32.86-12.536-45.396,0l-36.334,36.334L466.265,168.547z"
+            ></path>
+            <path
+              style="fill: #ff0029"
+              d="M463.891,48.11L425.182,9.402c-12.536-12.536-32.86-12.536-45.396,0l-36.334,36.334l61.407,61.407 L463.891,48.11z"
+            ></path>
+            <path
+              style="fill: #f7dc4d"
+              d="M33.052,356.136l-0.822,0.822l0,0L0.613,485.716c-1.77,7.209,0.355,14.819,5.604,20.068 c5.249,5.249,12.858,7.374,20.068,5.604l128.759-31.617l0,0l0.822-0.822L33.052,356.136z"
+            ></path>
+            <rect
+              x="297.713"
+              y="90.415"
+              transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 566.3668 489.469)"
+              style="fill: #ff9800"
+              width="173.685"
+              height="74.042"
+            ></rect>
+            <polygon
+              style="fill: #f7dc4d"
+              points="410.735,101.265 349.328,39.86 311.18,78.007 301.103,88.085 296.972,92.217 358.378,153.622 "
+            ></polygon>
+            <path
+              style="fill: #2d2b27"
+              d="M11.138,442.855l-10.524,42.86c-1.77,7.209,0.355,14.819,5.604,20.068 c5.249,5.249,12.858,7.374,20.068,5.604l42.86-10.525L11.138,442.855z"
+            ></path>
+            <path
+              style="fill: #403e3b"
+              d="M11.138,442.855l-10.524,42.86c-1.77,7.209,0.355,14.819,5.604,20.068l33.925-33.925L11.138,442.855z "
+            ></path>
+          </g>
+        </svg>
+      </button>
+      <header class="text-2xl | text-center | font-bold">
+        {{producto.name}}
+      </header>
+      <div
+        class="flex flex-col gap-4 | text-left - min-h-[24rem] justify-between"
+      >
+        {% if producto.has_multiple_images %}
+        <section class="carousel">
+          <div class="carousel-slides">
+            {% for image in producto.images %}
+            <div class="slide slide_{{ forloop.counter }}">
+              <img
+                src="{{ image }}"
+                alt="Image {{ forloop.counter }}"
+                class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center"
+              />
+            </div>
+            {% endfor %}
+          </div>
+          <button class="prev bg-orange-500 text-zinc-900 font-header">
+            &lt;
+          </button>
+          <button class="next bg-orange-500 text-zinc-900 font-header">
+            &gt;
+          </button>
+        </section>
+        {% else %}
+        <img
+          src="{{ producto.images|join:', ' }}"
+          class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center"
+        />
+        {% endif %}
+
+        <p class="font-semibold text-lg">{{producto.description}}</p>
+
+        {% if producto.has_multiple_links %}
+
+        <button
+          data-id="{{producto.id}}"
+          class="open_popup_links self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-building-store"
+            width="44"
+            height="44"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="inherit"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <line x1="3" y1="21" x2="21" y2="21" />
+            <path
+              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
+            />
+            <line x1="5" y1="21" x2="5" y2="10.85" />
+            <line x1="19" y1="21" x2="19" y2="10.85" />
+            <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+          </svg>
+        </button>
+        <dialog data-id="{{producto.id}}" class="rounded-lg shadow-md">
+          <div
+            class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md"
+          >
+            <ul class="flex flex-row flex-wrap justify-center gap-4">
+              {% for link in producto.links %}
+              <li
+                key="{idx}"
+                class="| border-2 border-solid border-[#00bfd8] rounded-full p-8"
+              >
+                <a
+                  href="{{ link}}"
+                  target="_blank"
+                  class="flex flex-col justify-center items-center | self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-building-store"
+                    width="44"
+                    height="44"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="inherit"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="3" y1="21" x2="21" y2="21" />
+                    <path
+                      d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
+                    />
+                    <line x1="5" y1="21" x2="5" y2="10.85" />
+                    <line x1="19" y1="21" x2="19" y2="10.85" />
+                    <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                  </svg>
+                  <p class="font-semibold text-xl">
+                    Opción {{forloop.counter}}
+                  </p>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+            <button data-id="{{producto.id}}" class="close_popup_links">
+              <svg
+                viewBox="0 0 24 24"
+                width="44"
+                height="44"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="inherit"
+                stroke="inherit"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <title>Close-Circle</title>
+                  <g
+                    id="Page-1"
+                    stroke="none"
+                    strokeWidth="1"
+                    fill="none"
+                    fillRule="evenodd"
+                  >
+                    <g id="Close-Circle">
+                      <rect
+                        id="Rectangle"
+                        fillRule="nonzero"
+                        x="0"
+                        y="0"
+                        width="24"
+                        height="24"
+                      ></rect>
+                      <circle
+                        id="Oval"
+                        stroke="#e60000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        cx="12"
+                        cy="12"
+                        r="9"
+                      ></circle>
+                      <line
+                        x1="14.1213"
+                        y1="9.87866"
+                        x2="9.8787"
+                        y2="14.1213"
+                        id="Path"
+                        stroke="#e60000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      ></line>
+                      <line
+                        x1="9.87866"
+                        y1="9.87866"
+                        x2="14.1213"
+                        y2="14.1213"
+                        id="Path"
+                        stroke="#e60000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      ></line>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </button>
+          </div>
+        </dialog>
+
+        {% else %}
+        <a
+          href="{{ producto.links|join:', ' }}"
+          target="_blank"
+          class="self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-building-store"
+            width="44"
+            height="44"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="inherit"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <line x1="3" y1="21" x2="21" y2="21" />
+            <path
+              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
+            />
+            <line x1="5" y1="21" x2="5" y2="10.85" />
+            <line x1="19" y1="21" x2="19" y2="10.85" />
+            <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+          </svg>
+        </a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+  <div
+    class="bg-slate-50 p-4 rounded-lg text-xl flex gap-2 justify-center items-center"
+  >
+    Puedes añadir cosas a tu carta haciendo click aquí:
+    <button id="BotonAnadirProducto">
+      <svg
+        version="1.1"
+        id="Layer_1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        fill="#000000"
+        class="w-[30px] | h-[30px]"
+      >
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g
+          id="SVGRepo_tracerCarrier"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></g>
+        <g id="SVGRepo_iconCarrier">
+          <circle style="fill: #7ab9e8" cx="256" cy="256" r="256"></circle>
+          <path
+            style="fill: #579adf"
+            d="M256,0v512c141.385,0,256-114.615,256-256S397.385,0,256,0z"
+          ></path>
+          <polygon
+            style="fill: #f2f2f4"
+            points="384,228.571 283.429,228.571 283.429,128 228.571,128 228.571,228.571 128,228.571 128,283.429 228.571,283.429 228.571,384 283.429,384 283.429,283.429 384,283.429 "
+          ></polygon>
+          <rect
+            x="283.429"
+            y="228.571"
+            style="fill: #dfdfe1"
+            width="100.571"
+            height="54.857"
+          ></rect>
+        </g>
+      </svg>
+    </button>
+  </div>
+</section>
+<div class="flex flex-col justify-between items-center">
+  <span class="text-red-500 text-xl font-bold">{{error}}</span>
+</div>
+
+<dialog id="PopupFormAnadirProducto">
+  <form
+    action="{% url 'crear_producto' %}"
+    class="flex flex-col justify-between items-center gap-6p-4 bg-white rounded-lg shadow-md text-stone-950 relative"
+    method="POST"
+  >
+    {%csrf_token%}
+
+    <div class="flex flex-col justify-between items-center">
+      <label for="id_name">Nombre:</label>
+      {{ form.name }}
+    </div>
+    <div class="flex flex-col justify-between items-center">
+      <label for="id_links">Enlaces (separados por comas):</label>
+      {{ form.links }}
+      <small>Ejemplo: https://example1.com, https://example2.com</small>
+    </div>
+    <div class="flex flex-col justify-between items-center">
+      <label for="id_images">Imágenes (separadas por comas):</label>
+      {{ form.images }}
+      <small
+        >Ejemplo: https://img1.com/image.jpg, https://img2.com/image.jpg</small
+      >
+    </div>
+    <div class="flex flex-col justify-between items-center">
+      <label for="id_description">Descripción:</label>
+      {{ form.description }}
+    </div>
+
+    <button type="submit">Crear Producto</button>
+  </form>
+  <button
+    onclick="document.getElementById('PopupFormAnadirProducto').close()"
+    class="absolute right-0 top-0"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="44"
+      height="44"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="inherit"
+      stroke="inherit"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <title>Close-Circle</title>
+        <g
+          id="Page-1"
+          stroke="none"
+          strokeWidth="1"
+          fill="none"
+          fillRule="evenodd"
+        >
+          <g id="Close-Circle">
+            <rect
+              id="Rectangle"
+              fillRule="nonzero"
+              x="0"
+              y="0"
+              width="24"
+              height="24"
+            ></rect>
+            <circle
+              id="Oval"
+              stroke="#e60000"
+              strokeWidth="2"
+              strokeLinecap="round"
+              cx="12"
+              cy="12"
+              r="9"
+            ></circle>
+            <line
+              x1="14.1213"
+              y1="9.87866"
+              x2="9.8787"
+              y2="14.1213"
+              id="Path"
+              stroke="#e60000"
+              strokeWidth="2"
+              strokeLinecap="round"
+            ></line>
+            <line
+              x1="9.87866"
+              y1="9.87866"
+              x2="14.1213"
+              y2="14.1213"
+              id="Path"
+              stroke="#e60000"
+              strokeWidth="2"
+              strokeLinecap="round"
+            ></line>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </button>
+</dialog>
+{%endblock%}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carta de Reyes</title>
+    <link rel="stylesheet" href="{%static 'css/global.css'%}" />
+    <script src="https://cdn.tailwindcss.com?version=3.0.0"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          fontFamily: {
+            header: ['"Pacifico", sans-serif'],
+            body: ['"Shadows Into Light", sans-serif']
+          },
+          extend: {
+            keyframes: {
+              rotation: {
+                '0%, 100%': { transform: 'rotate(0deg)' },
+                '50%': { transform: 'rotate(180deg)' }
+              }
+            },
+            animation: {
+              rotation: 'rotation 2s ease-in-out infinite'
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+              'gradient-conic':
+                'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+            }
+          }
+        }
+      }
+    </script>
+    <script src="{%static 'js/script.js'%}" defer></script>
+  </head>
+  <body class="text-zinc-900">
+    <div class="bg-orange-200 min-h-screen flex flex-col">
+      <header
+        class="text-black | font-header | pb-8 | flex | flex-col | justify-between | items-center | gap-7"
+      >
+        <nav
+          class="bg-orange-300/75 p-4 | w-full flex flex-row justify-between gap-2"
+        >
+          <ul class="flex flex-row justify-end gap-4">
+            <li
+              class="flex justify-center items-center rounded-full bg-slate-50 w-auto p-4 overflow-hidden text-xl | sm:text-2xl | transition-all | hover:scale-110 hover:cursor-pointer"
+            >
+              <a href="/">Inicio</a>
+            </li>
+          </ul>
+          <ul class="flex flex-row justify-end gap-2 | sm:gap-4">
+            {% if user.is_authenticated %}
+            <li
+              class="rounded-full | bg-red-500 | text-slate-50 | w-auto p-4 overflow-hidden text-xl | sm:text-2xl | transition-all | hover:scale-110 hover:bg-red-400 hover:cursor-pointer"
+            >
+              <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            </li>
+            {% else %}
+            <li
+              class="flex justify-center items-center text-center rounded-full bg-green-200 w-auto p-4 overflow-hidden text-xl | sm:text-2xl | transition-all | hover:scale-110 hover:bg-green-100 hover:cursor-pointer"
+            >
+              <a href="{% url 'login' %}">Iniciar Sesión</a>
+            </li>
+            <li
+              class="flex justify-center items-center rounded-full bg-blue-200 w-auto p-4 overflow-hidden text-xl | sm:text-2xl | transition-all | hover:scale-110 hover:bg-blue-100 hover:cursor-pointer"
+            >
+              <a href="{% url 'registro' %}">Registarse</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        <h1 class="text-4xl | text-center">Queridos Reyes Magos ...</h1>
+        <img
+          src="https://fotografias.lasexta.com/clipping/cmsimages01/2021/01/05/DAE96D97-478A-4926-9ED6-CEC0E49AE108/default.jpg?crop=1300,731,x0,y12&width=1900&height=1069&optimize=low"
+          alt="imagen de los tres reyes magos"
+          class="w-11/12 | h-full | m-4 | object-contain | object-center | rounded-2xl | md:object-cover md:h-[30rem]"
+        />
+      </header>
+
+      <main class="flex flex-col flex-1 justify-center items-center">
+        {%block content %} {% endblock %}
+      </main>
+
+      <footer
+        class="| text-black | p-7 | flex | flex-col | justify-center | items-center"
+      >
+        <p>2024 &copy;Pedro J.</p>
+      </footer>
+    </div>
+  </body>
+</html>
