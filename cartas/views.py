@@ -157,7 +157,7 @@ def editarProducto(request):
 
 def carta(request, username):
   try:
-    user = User.objects.get(username = username)
+    user = User.objects.get(username = username.lower())
     productos = Producto.objects.filter(user_id = user.id)
     
 
