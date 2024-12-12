@@ -23,7 +23,7 @@ def registro(request):
     
     if(formData['password1'] == formData['password2']):
       try: 
-        user = User.objects.create_user(username = formData['username'], password = formData['password1'])
+        user = User.objects.create_user(username = formData['username'].lower(), password = formData['password1'])
         user.save()
         
         djangoLogin(request, user)
@@ -46,7 +46,7 @@ def login(request):
   if(request.method == 'POST'):
     formData = request.POST
     
-    user = authenticate(request, username=formData['username'], password=formData['password'])
+    user = authenticate(request, username=formData['username'].lower(), password=formData['password'])
     if user is None:
       error = 'Usuario no existe o contraseña incorrecta'
       return render(request, 'login.html', {'form': AuthenticationForm, 'error' : error})
@@ -157,6 +157,7 @@ def editarProducto(request):
 
 def carta(request, username):
   try:
+    print(username.lower())
     user = User.objects.get(username = username.lower())
     productos = Producto.objects.filter(user_id = user.id)
     
