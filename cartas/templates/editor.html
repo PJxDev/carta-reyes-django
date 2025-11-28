@@ -18,7 +18,7 @@
       class="bg-gray-200 | border-slate-300 | border-2 | p-6 | rounded-xl | flex | flex-col | justify-between | gap-4 | w-full | max-w-xs | relative">
       <button
         data-id="{{producto.id}}"
-        class="open_popup_editar bg-yellow-50 | rounded-full | w-12 | h-12 | absolute | top-10 | right-10 | flex justify-center items-center">
+        class="open_popup_editar bg-yellow-50 | rounded-full | w-12 | h-12 | absolute | top-0 | right-0 | flex justify-center items-center">
         <svg
           version="1.1"
           id="Layer_1"
@@ -264,11 +264,11 @@
         data-id="{{producto.id}}"
         class="dialog_editar rounded-lg shadow-md h-[90vh]">
         <section
-          class="flex flex-col justify-between items-center gap-6 w-300 px-20 py-10 pt-20 bg-white rounded-lg shadow-md">
+          class="h-full flex flex-col justify-between items-center gap-6 w-300 px-20 py-10 pt-20 bg-white rounded-lg shadow-md">
           <form
             action="{% url 'editar_producto' %}"
             method="POST"
-            class="flex flex-col justify-center items-center gap-4 h-full">
+            class="flex flex-col items-center gap-4 h-full">
             {% csrf_token %}
             <input
               name="product-id"
