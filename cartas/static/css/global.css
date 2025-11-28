@@ -48,17 +48,17 @@ textarea {
   margin: auto;
   overflow: hidden;
 
-  .carousel-slides {
+  & .carousel-slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
   }
 
-  .slide {
+  & .slide {
     min-width: 100%;
     box-sizing: border-box;
   }
 
-  button {
+  & button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -73,11 +73,11 @@ textarea {
     align-items: center;
   }
 
-  button.prev {
+  & button.prev {
     left: 10px;
   }
 
-  button.next {
+  & button.next {
     right: 10px;
   }
 }
@@ -86,29 +86,29 @@ textarea {
 dialog.tipo_confirmacion{
   border-radius: 2rem;
   
-  section{
+  & section{
     display: flex;
     flex-direction: column;
     gap: .5rem;
     padding: 1rem;
 
-    h2{
+    & h2{
       font-weight: bold;
       text-align: center;
     }
 
-    span{
+    & span{
       text-align: center;
     }
 
-    div{
+    & div{
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
       align-items: center;
 
-      button{
+     & button{
         min-width: 2rem;
         width: 20%;
         height: 2rem;
