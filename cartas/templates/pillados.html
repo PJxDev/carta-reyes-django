@@ -1,51 +1,43 @@
 {% extends "layout.html" %} {%block content%}
 
-
 <section
-  class="bg-pink-100/90 | min-w-full | text-black | p-7 | flex | flex-1 | flex-col | gap-4 | justify-center | items-center"
->
-<h2 class="text-2xl">Regalos pillados por ti:</h2>
+  class="bg-pink-100/90 | min-w-full | text-black | p-7 | flex | flex-1 | flex-col | gap-4 | justify-center | items-center">
+  <h2 class="text-2xl">Regalos pillados por ti:</h2>
 
   <section
-    class="grid | grid-cols-1 |  justify-items-center | gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3"
-  >
+    class="grid | grid-cols-1 | justify-items-center | gap-4 | w-full | max-w-5xl || sm:grid-cols-2 md:grid-cols-3">
     {% for producto in productos %}
     <article
-      class="bg-gray-200 | border-slate-300 | border-2 | p-6 | rounded-xl | flex | flex-col | justify-between | gap-4 | w-full | h-full | max-w-xs | relative"
-    >
-      {% if user.is_authenticated %} 
-        {% if producto.esta_pillado %} 
-          {% if producto.user_lo_pillo%}
-          <div
-            class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-blue-400"
-          >
-            <button class="btn_despillar_producto" data-producto-id="{{producto.id}}">LO PILLASTE</button>
-          </div>
-          {%else%}
-          <div
-            class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-red-400"
-          >
-           PILLADO
-          </div>
-          {%endif%} 
-        {%else%}
-        <div
-          class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-emerald-400"
-        >
-          <button class="btn_pillar_producto" data-producto-id="{{producto.id}}">
-            PILLAR
-          </button>
-        </div>
-        {%endif%} 
-      {%endif%}
+      class="bg-gray-200 | border-slate-300 | border-2 | p-6 | rounded-xl | flex | flex-col | justify-between | gap-4 | w-full | h-full | max-w-xs | relative">
+      {% if user.is_authenticated %} {% if producto.esta_pillado %} {% if producto.user_lo_pillo%}
+      <div
+        class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-blue-400">
+        <button
+          class="btn_despillar_producto"
+          data-producto-id="{{producto.id}}">
+          LO PILLASTE
+        </button>
+      </div>
+      {%else%}
+      <div
+        class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-red-400">
+        PILLADO
+      </div>
+      {%endif%} {%else%}
+      <div
+        class="rounded-lg | flex | relative | w-full | justify-center | items-center | text-white | font-bold bg-emerald-400">
+        <button class="btn_pillar_producto" data-producto-id="{{producto.id}}">
+          PILLAR
+        </button>
+      </div>
+      {%endif%} {%endif%}
 
       <header class="text-2xl | text-center | font-bold">
-        {{producto.name}} 
+        {{producto.name}}
       </header>
       <span class="text-lg | text-center">({{producto.user_id}})</span>
       <div
-        class="flex flex-col gap-4 | text-left - min-h-[24rem] justify-between"
-      >
+        class="flex flex-col gap-4 | text-left - min-h-[24rem] justify-between">
         {% if producto.has_multiple_images %}
         <section class="carousel">
           <div class="carousel-slides">
@@ -54,8 +46,7 @@
               <img
                 src="{{ image }}"
                 alt="Image {{ forloop.counter }}"
-                class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center"
-              />
+                class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center" />
             </div>
             {% endfor %}
           </div>
@@ -69,8 +60,7 @@
         {% else %}
         <img
           src="{{ producto.images|join:', ' }}"
-          class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center"
-        />
+          class="rounded-lg | flex | relative | w-full | h-[15rem] | | justify-center | items-center | object-cover | object-center" />
         {% endif %}
 
         <p class="font-semibold text-lg">{{producto.description}}</p>
@@ -79,8 +69,7 @@
 
         <button
           data-id="{{producto.id}}"
-          class="open_popup_links self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
-        >
+          class="open_popup_links self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-building-store"
@@ -91,13 +80,11 @@
             stroke="inherit"
             fill="none"
             strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+            strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <line x1="3" y1="21" x2="21" y2="21" />
             <path
-              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
-            />
+              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
             <line x1="5" y1="21" x2="5" y2="10.85" />
             <line x1="19" y1="21" x2="19" y2="10.85" />
             <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
@@ -105,19 +92,16 @@
         </button>
         <dialog data-id="{{producto.id}}" class="rounded-lg shadow-md">
           <div
-            class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md"
-          >
+            class="flex flex-col justify-between items-center gap-6 w-300 p-20 bg-white rounded-lg shadow-md">
             <ul class="flex flex-row flex-wrap justify-center gap-4">
               {% for link in producto.links %}
               <li
                 key="{idx}"
-                class="| border-2 border-solid border-[#00bfd8] rounded-full p-8"
-              >
+                class="| border-2 border-solid border-[#00bfd8] rounded-full p-8">
                 <a
                   href="{{ link}}"
                   target="_blank"
-                  class="flex flex-col justify-center items-center | self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
-                >
+                  class="flex flex-col justify-center items-center | self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-building-store"
@@ -128,13 +112,11 @@
                     stroke="inherit"
                     fill="none"
                     strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
+                    strokeLinejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <line x1="3" y1="21" x2="21" y2="21" />
                     <path
-                      d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
-                    />
+                      d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
                     <line x1="5" y1="21" x2="5" y2="10.85" />
                     <line x1="19" y1="21" x2="19" y2="10.85" />
                     <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
@@ -154,14 +136,12 @@
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="inherit"
-                stroke="inherit"
-              >
+                stroke="inherit">
                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
                   id="SVGRepo_tracerCarrier"
                   strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></g>
+                  strokeLinejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
                   <title>Close-Circle</title>
                   <g
@@ -169,8 +149,7 @@
                     stroke="none"
                     strokeWidth="1"
                     fill="none"
-                    fillRule="evenodd"
-                  >
+                    fillRule="evenodd">
                     <g id="Close-Circle">
                       <rect
                         id="Rectangle"
@@ -178,8 +157,7 @@
                         x="0"
                         y="0"
                         width="24"
-                        height="24"
-                      ></rect>
+                        height="24"></rect>
                       <circle
                         id="Oval"
                         stroke="#e60000"
@@ -187,8 +165,7 @@
                         strokeLinecap="round"
                         cx="12"
                         cy="12"
-                        r="9"
-                      ></circle>
+                        r="9"></circle>
                       <line
                         x1="14.1213"
                         y1="9.87866"
@@ -197,8 +174,7 @@
                         id="Path"
                         stroke="#e60000"
                         strokeWidth="2"
-                        strokeLinecap="round"
-                      ></line>
+                        strokeLinecap="round"></line>
                       <line
                         x1="9.87866"
                         y1="9.87866"
@@ -207,8 +183,7 @@
                         id="Path"
                         stroke="#e60000"
                         strokeWidth="2"
-                        strokeLinecap="round"
-                      ></line>
+                        strokeLinecap="round"></line>
                     </g>
                   </g>
                 </g>
@@ -221,8 +196,7 @@
         <a
           href="{{ producto.links|join:', ' }}"
           target="_blank"
-          class="self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110"
-        >
+          class="self-center transition-all stroke-[#00bfd8] | hover:stroke-red-500 hover:scale-110">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-building-store"
@@ -233,13 +207,11 @@
             stroke="inherit"
             fill="none"
             strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+            strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <line x1="3" y1="21" x2="21" y2="21" />
             <path
-              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"
-            />
+              d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
             <line x1="5" y1="21" x2="5" y2="10.85" />
             <line x1="19" y1="21" x2="19" y2="10.85" />
             <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
