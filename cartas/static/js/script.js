@@ -103,7 +103,7 @@ if (BotonesPillarProducto && BotonesPillarProducto.length > 0) {
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            navigation.reload()
+            reloadPage()
           } else {
             alert('Hubo un error al cambiar el estado del producto.')
           }
@@ -153,7 +153,7 @@ if (BotonesDespillarProducto && BotonesDespillarProducto.length > 0) {
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              navigation.reload()
+              reloadPage()
             } else {
               alert('Hubo un error al cambiar el estado del producto.')
             }
@@ -213,7 +213,7 @@ function deleteProduct(id) {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        navigation.reload()
+        reloadPage()
       } else {
         alert('Hubo un error al borrar el producto.')
       }
@@ -281,6 +281,18 @@ function getCookie(name) {
     }
   }
   return cookieValue
+}
+
+function reloadPage() {
+  if (window.navigation && typeof window.navigation.reload === 'function') {
+    try {
+      window.navigation.reload()
+    } catch (e) {
+      window.location.reload()
+    }
+  } else {
+    window.location.reload()
+  }
 }
 
 
