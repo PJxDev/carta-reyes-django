@@ -173,6 +173,8 @@ if (BotonesDespillarProducto && BotonesDespillarProducto.length > 0) {
   })
 }
 
+
+
 function deleteProduct(id) {
   let dialog = document.createElement('dialog')
   let section = document.createElement('section')
@@ -184,6 +186,9 @@ function deleteProduct(id) {
 
   dialog.classList.add('tipo_confirmacion')
 
+  botonConfirmar.type = 'button'
+  botonCancelar.type = 'button'
+
   titulo.textContent = 'MODIFICAR ESTADO'
   text.textContent = 'Se va a proceder a borrar el producto. ¿Desea proceder?'
   botonConfirmar.textContent = 'Si'
@@ -194,10 +199,7 @@ function deleteProduct(id) {
   botonConfirmar.classList.add('bg-emerald-300')
   botonCancelar.classList.add('bg-red-300')
 
-  botonCancelar.addEventListener('click', () => {
-    dialog.remove()
-  })
-  botonConfirmar.addEventListener('click', () => {
+  const handleConfirm = () => {
     const productoId = id
     const csrfToken = getCookie('csrftoken')
 
@@ -208,16 +210,24 @@ function deleteProduct(id) {
         'Content-Type': 'application/json'
       }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          navigation.reload()
-        } else {
-          alert('Hubo un error al borrar el producto.')
-        }
-      })
-      .catch((error) => console.error('Error:', error))
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        navigation.reload()
+      } else {
+        alert('Hubo un error al borrar el producto.')
+      }
+    })
+    .catch((error) => console.error('Error:', error))
+  }
+
+  botonCancelar.addEventListener('click', () => {
+    dialog.remove()
   })
+
+  botonConfirmar.addEventListener('click', handleConfirm)
+  botonConfirmar.addEventListener('touchend', handleConfirm)
+  botonConfirmar.addEventListener('pointerdown', (e) => e.preventDefault())
 
   divBotones.insertAdjacentElement('beforeend', botonConfirmar)
   divBotones.insertAdjacentElement('beforeend', botonCancelar)
