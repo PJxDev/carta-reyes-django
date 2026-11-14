@@ -25,7 +25,28 @@ carta-reyes/
 │   │   ├── SiteFooter.tsx       Pie de página                               (1)
 │   │   └── icons.tsx            Iconos SVG compartidos                      (1)
 │   └── lib/
-│       └── site.ts              Textos y constantes de presentación         (1)
+│       ├── site.ts              Textos y constantes de presentación         (1)
+│       ├── config.ts            Variables de entorno validadas              (2)
+│       ├── types.ts             Usuario, Producto, ProductoInput            (2)
+│       ├── validation.ts        Reglas de usuario, contraseña, URLs, producto (2)
+│       ├── auth/
+│       │   ├── password.ts      scrypt + compatibilidad con hashes Django   (2)
+│       │   └── session.ts       Token de sesión firmado (HMAC)              (2)
+│       ├── store/
+│       │   ├── schema.ts        Pestañas y columnas                         (2)
+│       │   ├── backend.ts       Contrato de almacén                         (2)
+│       │   ├── table.ts         Filas por nombre de columna, cola de escritura (2)
+│       │   ├── sheets-backend.ts Google Sheets con caché                    (2)
+│       │   ├── memory-backend.ts Memoria/archivo para desarrollo y tests    (2)
+│       │   └── index.ts         Ensamblado y singleton                      (2)
+│       ├── sheets/
+│       │   ├── a1.ts            Notación A1                                 (2)
+│       │   ├── google-auth.ts   JWT de cuenta de servicio → token           (2)
+│       │   └── api.ts           Cliente REST con reintentos                 (2)
+│       ├── repos/               usuarios, productos, mappers                (2)
+│       └── import/django-dump.ts Importador de dumpdata                     (2)
+├── scripts/                     sheet:setup e import:django                 (2)
+├── tests/                       67 tests + simulador de Google              (2)
 │
 ├── cartareyes/  🗑️              Proyecto Django (settings, urls, wsgi…)
 ├── cartas/      🗑️              App Django (modelos, vistas, plantillas…)

@@ -1,6 +1,6 @@
 # Esquema de datos (Google Sheets)
 
-> **Estado:** diseño cerrado en la fase 1; se implementa en la fase 2.
+> **Estado:** implementado en la fase 2 (`src/lib/store/schema.ts` es la fuente de verdad).
 
 La "base de datos" es **un único libro de Google Sheets con dos pestañas**. La
 primera fila de cada pestaña contiene los nombres de columna; cada fila

@@ -10,7 +10,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "sheet:setup": "node --env-file-if-exists=.env.local scripts/setup-sheet.ts",
+    "import:django": "node --env-file-if-exists=.env.local scripts/import-django-dump.ts"
   },
   "dependencies": {
     "next": "^16.2.0",

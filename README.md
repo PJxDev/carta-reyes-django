@@ -13,7 +13,7 @@ repitan.
 | Fase | Contenido | Estado |
 | ---- | --------- | ------ |
 | 1 | Base Next.js (App Router, TypeScript, Tailwind 4), layout, fuentes, cabecera, home y documentación | ✅ hecha |
-| 2 | Capa de datos sobre Google Sheets, autenticación (hash + sesión), script de preparación de la hoja e importador de datos de Django | ⏳ |
+| 2 | Capa de datos sobre Google Sheets, hash de contraseñas y sesión, script de preparación de la hoja e importador de datos de Django (con 67 tests) | ✅ hecha |
 | 3 | Páginas y lógica de negocio: registro, login, editor, carta pública, pillados | ⏳ |
 | 4 | Revisión de responsive, corrección de fallos de diseño y retirada del código Django | ⏳ |
 
@@ -52,6 +52,29 @@ npm run dev                  # http://localhost:3000
 | `npm run dev` | Servidor de desarrollo |
 | `npm run build` / `npm start` | Compilación y servidor de producción |
 | `npm run typecheck` | Comprobación de tipos con `tsc` |
+| `npm test` | Tests (`node:test`, sin red: Google se simula) |
+| `npm run sheet:setup` | Crea pestañas y cabeceras en la hoja de Google |
+| `npm run import:django -- dump.json [--dry-run]` | Importa usuarios y productos desde Django |
+
+## Configurar Google Sheets
+
+1. Crea un libro en Google Sheets y copia su ID (la parte entre `/d/` y `/edit` de la URL) en `GOOGLE_SHEET_ID`.
+2. En Google Cloud Console crea un proyecto y habilita la **Google Sheets API**.
+3. Crea una **cuenta de servicio** y una clave JSON. Copia `client_email` en `GOOGLE_SERVICE_ACCOUNT_EMAIL` y `private_key` en `GOOGLE_PRIVATE_KEY` (entre comillas, con los `\n` tal cual).
+4. Comparte el libro con ese email como **Editor**.
+5. Ejecuta `npm run sheet:setup`.
+
+Sin `GOOGLE_SHEET_ID` en desarrollo se usa `.data/db.json`, así se puede trabajar sin credenciales.
+
+## Migrar los datos de Django
+
+```bash
+python manage.py dumpdata auth.user cartas.producto --indent 2 > dump.json
+npm run import:django -- dump.json --dry-run
+npm run import:django -- dump.json
+```
+
+Las contraseñas de Django siguen funcionando y se actualizan a scrypt en el primer login. Es repetible sin duplicar datos.
 
 ## Documentación del proyecto
 
