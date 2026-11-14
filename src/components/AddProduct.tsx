@@ -5,22 +5,22 @@ import { Modal } from './Modal'
 import { PlusCircleIcon } from './icons'
 import { ProductForm } from './ProductForm'
 
+/** Etiqueta en blanco, con el mismo tamaño que las demás, para añadir un regalo. */
 export function AddProduct() {
   const [open, setOpen] = useState(false)
   return (
-    <div className="flex flex-wrap items-center justify-center gap-3 rounded-lg bg-slate-50 p-4 text-center text-xl">
-      <span>Puedes añadir cosas a tu carta haciendo click aquí:</span>
+    <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="Añadir producto"
-        className="flex size-11 items-center justify-center rounded-full transition-transform hover:scale-110"
+        className="flex min-h-64 w-full max-w-xs flex-col items-center justify-center gap-3 rounded-2xl border-[3px] border-dashed border-orange-600 bg-orange-50/70 p-6 text-center font-hand text-3xl text-tinta transition-colors hover:bg-orange-50"
       >
-        <PlusCircleIcon />
+        <PlusCircleIcon size={48} />
+        Añadir un regalo
       </button>
-      <Modal open={open} onClose={() => setOpen(false)} title="Añadir producto" className="max-w-xl">
-        <ProductForm title="AÑADIR PRODUCTO" submitLabel="Crear Producto" onSaved={() => setOpen(false)} />
+      <Modal open={open} onClose={() => setOpen(false)} title="Añadir un regalo" className="max-w-xl">
+        <ProductForm title="Añadir un regalo" submitLabel="Crear regalo" onSaved={() => setOpen(false)} />
       </Modal>
-    </div>
+    </>
   )
 }

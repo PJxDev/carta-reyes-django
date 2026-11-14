@@ -11,55 +11,89 @@ interface ProductCardProps {
   corner?: ReactNode
   /** Mostrar "(usuario)" bajo el nombre; solo con `product.ownerUsername`. */
   showOwner?: boolean
-  /** Contenido extra al final de la tarjeta (diálogos). */
+  /** Contenido extra fuera de la etiqueta (diálogos). */
   children?: ReactNode
 }
 
+/** Sello rojo que se estampa sobre la imagen cuando otra persona ya ha pillado el regalo. */
+function Sello() {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <span className="-rotate-12 rounded-md border-4 border-double border-sello bg-etiqueta/80 px-4 py-1 text-3xl font-black tracking-wide text-sello">
+        PILLADO
+      </span>
+    </div>
+  )
+}
+
+/**
+ * Un regalo de la carta, dibujado como una etiqueta de regalo. La sombra va en
+ * el contenedor (drop-shadow) porque la silueta se recorta con clip-path.
+ */
 export function ProductCard({ product, corner, showOwner = false, children }: ProductCardProps) {
   const { images } = product
   return (
-    <article className="relative flex h-full w-full max-w-xs flex-col justify-between gap-4 rounded-xl border-2 border-slate-300 bg-gray-200 p-6">
-      {corner}
-      <PillButton id={product.id} status={product.status} />
+    <article className="relative h-full w-full max-w-xs drop-shadow-[0_6px_8px_rgb(59_42_30/0.25)]">
+      <div className="etiqueta-forma relative flex h-full flex-col justify-between gap-4 bg-etiqueta px-5 pb-5 pt-14">
+        {/* refuerzo del agujero del cordel */}
+        <span
+          aria-hidden="true"
+          className="absolute left-1/2 top-6 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-oro"
+        />
+        {corner}
 
-      {/* Con botón de esquina (44 px) el título baja para no quedar debajo */}
-      <h3 className={`text-center text-2xl font-bold [overflow-wrap:anywhere] ${corner ? 'mt-6' : ''}`}>
-        {product.name}
-      </h3>
-      {showOwner && product.ownerUsername && (
-        <span className="text-center text-lg [overflow-wrap:anywhere]">({product.ownerUsername})</span>
-      )}
+        <div className="flex flex-col gap-3">
+          <PillButton id={product.id} status={product.status} />
+          <h3 className="text-center font-hand text-3xl leading-8 text-tinta [overflow-wrap:anywhere]">
+            {product.name}
+          </h3>
+          {showOwner && product.ownerUsername && (
+            <p className="text-center text-base text-tinta/80 [overflow-wrap:anywhere]">
+              Para {product.ownerUsername}
+            </p>
+          )}
+        </div>
 
-      <div className="flex min-h-[24rem] flex-col justify-between gap-4 text-left">
-        {images.length > 1 ? (
-          <ImageCarousel images={images} name={product.name} />
-        ) : images.length === 1 ? (
-          <SafeImage src={images[0]} alt={product.name} className="h-60 w-full rounded-lg object-cover object-center" />
-        ) : (
-          <div
-            role="img"
-            aria-label="Sin imagen"
-            className="flex h-60 w-full items-center justify-center rounded-lg bg-slate-300 text-5xl"
-          >
-            🎁
+        <div className="flex min-h-[20rem] flex-col justify-between gap-4">
+          <div className="relative">
+            {images.length > 1 ? (
+              <ImageCarousel images={images} name={product.name} />
+            ) : images.length === 1 ? (
+              <SafeImage
+                src={images[0]}
+                alt={product.name}
+                className="h-60 w-full rounded-md object-cover object-center"
+              />
+            ) : (
+              <div
+                role="img"
+                aria-label="Sin imagen"
+                className="flex h-60 w-full items-center justify-center rounded-md bg-orange-100 text-5xl"
+              >
+                🎁
+              </div>
+            )}
+            {product.status === 'taken' && <Sello />}
           </div>
-        )}
 
-        {product.description && (
-          <p className="whitespace-pre-line text-lg font-semibold [overflow-wrap:anywhere]">{product.description}</p>
-        )}
+          {product.description && (
+            <p className="whitespace-pre-line text-base leading-relaxed text-tinta [overflow-wrap:anywhere]">
+              {product.description}
+            </p>
+          )}
 
-        <LinksButton links={product.links} name={product.name} />
+          <LinksButton links={product.links} name={product.name} />
+        </div>
       </div>
       {children}
     </article>
   )
 }
 
-/** Rejilla de tarjetas: 1 columna en móvil, 2 desde sm, 3 desde md. */
+/** Rejilla de etiquetas: 1 columna en móvil, 2 desde sm, 3 desde md. */
 export function ProductGrid({ children }: { children: ReactNode }) {
   return (
-    <section className="grid w-full max-w-5xl grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3">
+    <section className="grid w-full max-w-5xl grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-3">
       {children}
     </section>
   )

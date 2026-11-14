@@ -17,7 +17,7 @@ carta-reyes/
 ├── src/
 │   ├── app/                     Rutas (App Router)
 │   │   ├── layout.tsx           HTML base, fuentes, cabecera y pie          (1)
-│   │   ├── globals.css          Tailwind + estilos base                     (1)
+│   │   ├── globals.css          Tailwind, tokens de color, etiqueta y papel (1,5)
 │   │   ├── page.tsx             Home ("/")                                  (1,3)
 │   │   ├── login/page.tsx       Inicio de sesión                            (3)
 │   │   ├── registro/page.tsx    Alta de usuario                             (3)
@@ -25,12 +25,14 @@ carta-reyes/
 │   │   ├── pillados/page.tsx    Regalos que has pillado (privado)           (3)
 │   │   ├── [username]/page.tsx  Carta pública                               (3)
 │   │   ├── not-found.tsx        "Usuario no encontrado"                     (3)
+│   │   ├── loading.tsx          Estado de carga                             (5)
 │   │   ├── error.tsx            Fallo al leer la hoja → reintentar          (3)
 │   │   └── actions/
 │   │       ├── auth.ts          registerAction, loginAction, logoutAction   (3)
 │   │       └── productos.ts     save/delete/pillar/despillar                (3)
 │   ├── components/
 │   │   ├── SiteHeader.tsx       Navegación (según sesión), título, imagen   (1,3)
+│   │   ├── Hero.tsx             Portada ilustrada (SVG) o foto opcional     (5)
 │   │   ├── SiteFooter.tsx       Pie de página                               (1)
 │   │   ├── icons.tsx            Iconos SVG compartidos                      (1,3)
 │   │   ├── Modal.tsx            <dialog> nativo reutilizable                (3)

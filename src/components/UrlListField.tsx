@@ -68,18 +68,18 @@ export function UrlListField({ name, label, kind, initial = [] }: UrlListFieldPr
             setError(null)
           }}
           onKeyDown={onKeyDown}
-          className="min-w-0 flex-1 rounded-md bg-slate-200 p-2 text-lg"
+          className="min-w-0 flex-1 rounded-md bg-white p-2 text-lg"
         />
         <button
           type="button"
           onClick={add}
-          className="min-h-11 shrink-0 rounded-md bg-sky-600 px-4 font-semibold text-white hover:bg-sky-700"
+          className="min-h-11 shrink-0 rounded-md bg-sky-700 px-4 font-semibold text-white hover:bg-sky-800"
         >
           Añadir
         </button>
       </div>
       {error && (
-        <p role="alert" className="text-sm font-semibold text-red-600">
+        <p role="alert" className="text-sm font-semibold text-red-700">
           {error}
         </p>
       )}
@@ -97,7 +97,7 @@ export function UrlListField({ name, label, kind, initial = [] }: UrlListFieldPr
                 type="button"
                 aria-label={`Quitar ${url}`}
                 onClick={() => setItems(items.filter((item) => item !== url))}
-                className="absolute -right-1 -top-1 flex size-7 items-center justify-center rounded-full bg-red-600 text-lg leading-none text-white"
+                className="absolute -right-1 -top-1 flex size-7 items-center justify-center rounded-full bg-red-700 text-lg leading-none text-white"
               >
                 &times;
               </button>

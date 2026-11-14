@@ -14,7 +14,7 @@ function SubmitButton({ children }: { children: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="min-h-11 rounded-md bg-green-600 px-5 font-semibold text-white hover:bg-green-700 disabled:opacity-60"
+      className="min-h-11 rounded-md bg-emerald-700 px-5 font-semibold text-white hover:bg-emerald-800 disabled:opacity-60"
     >
       {pending ? 'Guardando…' : children}
     </button>
@@ -46,10 +46,10 @@ export function ProductForm({ product, title, submitLabel, onSaved, extraAction 
   return (
     <form action={action} className="flex flex-col items-stretch gap-4">
       {product && <input type="hidden" name="id" value={product.id} />}
-      <h3 className="text-center text-2xl">{title}</h3>
+      <h3 className="text-center font-header text-2xl">{title}</h3>
 
       {state.error && (
-        <p role="alert" className="text-center text-lg font-semibold text-red-600">
+        <p role="alert" className="text-center text-lg font-semibold text-red-700">
           {state.error}
         </p>
       )}
@@ -63,7 +63,7 @@ export function ProductForm({ product, title, submitLabel, onSaved, extraAction 
         onChange={(event) => setName(event.target.value)}
         placeholder="Nombre"
         aria-label="Nombre"
-        className="w-full rounded-md bg-slate-200 p-2 text-lg"
+        className="w-full rounded-md bg-white p-2 text-lg"
       />
 
       <UrlListField name="links" label="Enlaces de compra:" kind="link" initial={product?.links} />
@@ -77,7 +77,7 @@ export function ProductForm({ product, title, submitLabel, onSaved, extraAction 
         onChange={(event) => setDescription(event.target.value)}
         placeholder="Descripción"
         aria-label="Descripción"
-        className="h-28 w-full resize-none rounded-md bg-slate-200 p-2 text-lg"
+        className="h-28 w-full resize-none rounded-md bg-white p-2 text-lg"
       />
 
       <div className="flex flex-row flex-wrap justify-center gap-4">

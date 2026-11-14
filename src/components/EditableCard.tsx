@@ -41,7 +41,7 @@ export function EditableCard({ product }: { product: ProductoView }) {
           type="button"
           onClick={() => setEditing(true)}
           aria-label={`Editar ${product.name}`}
-          className="absolute right-1 top-1 flex size-11 items-center justify-center rounded-full bg-yellow-50 text-zinc-900 shadow transition-transform hover:scale-110"
+          className="absolute right-1 top-1 flex size-11 items-center justify-center rounded-full bg-white text-tinta shadow transition-transform hover:scale-110"
         >
           <PencilIcon />
         </button>
@@ -49,20 +49,20 @@ export function EditableCard({ product }: { product: ProductoView }) {
     >
       <Modal open={editing} onClose={() => setEditing(false)} title={`Editar ${product.name}`} className="max-w-xl">
         {error && (
-          <p role="alert" className="mb-3 text-center text-lg font-semibold text-red-600">
+          <p role="alert" className="mb-3 text-center text-lg font-semibold text-red-700">
             {error}
           </p>
         )}
         <ProductForm
           product={product}
-          title="EDITAR PRODUCTO"
+          title="Editar regalo"
           submitLabel="Guardar"
           onSaved={() => setEditing(false)}
           extraAction={
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="min-h-11 rounded-md bg-red-600 px-5 font-semibold text-white hover:bg-red-700"
+              className="min-h-11 rounded-md bg-red-700 px-5 font-semibold text-white hover:bg-red-800"
             >
               Eliminar
             </button>
@@ -70,8 +70,11 @@ export function EditableCard({ product }: { product: ProductoView }) {
         />
         <ConfirmDialog
           open={confirming}
-          title="BORRAR PRODUCTO"
-          message="Se va a proceder a borrar el producto. ¿Desea proceder?"
+          title="¿Borrar este regalo?"
+          message="Se quitará de tu carta y no se puede deshacer."
+          confirmLabel="Sí, borrar"
+          cancelLabel="Cancelar"
+          tone="danger"
           busy={deleting}
           onConfirm={remove}
           onCancel={() => setConfirming(false)}

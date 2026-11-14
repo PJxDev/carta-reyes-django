@@ -5,7 +5,7 @@ Aplicación web para crear tu carta a los Reyes Magos, compartirla con un enlace
 repitan.
 
 > El proyecto nació como Django + PostgreSQL y se ha migrado a
-> **Next.js + Google Sheets** en cuatro fases, cada una entregada como un patch
+> **Next.js + Google Sheets** en cinco fases, cada una entregada como un patch
 > (`git am`). El código Django ya no está en el árbol; sigue disponible en el
 > historial de git (ver "Migrar los datos de Django").
 
@@ -17,6 +17,7 @@ repitan.
 | 2 | Capa de datos sobre Google Sheets, hash de contraseñas y sesión, script de preparación de la hoja e importador de datos de Django (con 67 tests) | ✅ hecha |
 | 3 | Páginas y lógica de negocio: registro, login, editor, carta pública, pillados (Server Actions, componentes cliente) | ✅ hecha |
 | 4 | Auditoría de responsive y corrección de fallos de diseño; retirada del código Django | ✅ hecha |
+| 5 | Mejora de diseño conservando la identidad: etiquetas de regalo, carta en papel pautado, portada ilustrada, sello de «PILLADO» | ✅ hecha |
 
 ## Stack
 
@@ -124,6 +125,24 @@ Además:
   equivalencia con los modelos de Django.
 
 Ambos documentos se actualizan en cada fase.
+
+## Diseño (fase 5)
+
+Se mantiene lo que hace reconocible la web: Pacifico + Shadows Into Light, el
+naranja de la cabecera, el crema de fondo, el azul y el rosa de las secciones y
+los botones verde / rojo / azul. Lo que cambia es el acabado:
+
+- **Productos como etiquetas de regalo**: silueta con esquinas cortadas y agujero
+  (`.etiqueta-forma` en `globals.css`), sombra sobre el contenedor para que siga la forma.
+- **Introducción como carta en papel pautado**, con margen rojo y ligera inclinación.
+- **Portada**: ilustración SVG propia (`Hero.tsx`) en lugar de una foto externa de
+  un tercero. Para volver a una foto, pon su URL en `HERO_IMAGE_URL` de `src/lib/site.ts`.
+- **Sello «PILLADO»** y botones con texto más claro («Pillar», «Lo pillaste»,
+  «Ver N opciones de compra»), foco visible, `prefers-reduced-motion` respetado
+  y zonas táctiles de al menos 44 px.
+- `loading.tsx`, `not-found` y `error` con el mismo estilo.
+
+Tokens de color: `noche #1b2559`, `oro #f5b93b`, `tinta #3b2a1e`, `etiqueta #fffaf0`, `sello #b91c1c`.
 
 ## Responsive: qué se auditó y qué se corrigió
 

@@ -7,7 +7,7 @@ export default async function HomePage() {
 
   if (!user) {
     return (
-      <h3 className="w-full px-4 text-center text-2xl font-semibold text-slate-950">
+      <h3 className="w-full max-w-2xl px-4 text-center text-2xl font-semibold">
         ¡ Regístrate o inicia sesión para editar tu carta y compartirla !
       </h3>
     )
@@ -16,7 +16,7 @@ export default async function HomePage() {
   const button = 'min-h-12 rounded-full px-6 py-3 text-xl font-semibold transition-transform hover:scale-105'
   return (
     <section className="flex flex-col items-center gap-5 px-4 text-center">
-      <h2 className="max-w-full text-3xl font-semibold [overflow-wrap:anywhere]">¡Hola, {user.username}!</h2>
+      <h2 className="max-w-full font-header text-4xl [overflow-wrap:anywhere]">¡Hola, {user.username}!</h2>
       <div className="flex flex-wrap justify-center gap-3">
         <Link href="/editor" className={`${button} bg-emerald-200`}>
           Editar mi carta

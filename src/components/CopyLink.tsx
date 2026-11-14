@@ -21,7 +21,7 @@ export function CopyLink({ path }: { path: string }) {
     <button
       type="button"
       onClick={copy}
-      className="min-h-11 max-w-full rounded-full bg-sky-200 px-5 py-2 text-lg font-semibold [overflow-wrap:anywhere] hover:bg-sky-300"
+      className="min-h-11 max-w-full rounded-full bg-sky-200 px-5 py-2 text-lg font-semibold text-tinta [overflow-wrap:anywhere] hover:bg-sky-300"
     >
       {copied ? '¡Enlace copiado!' : `Copiar enlace de mi carta (${path})`}
     </button>

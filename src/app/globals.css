@@ -1,19 +1,32 @@
 @import 'tailwindcss';
 
-/* Tipografías: las variables las define next/font en layout.tsx */
+/*
+ * Identidad visual: papel de carta, naranja de los Reyes, noche y oro.
+ * Los colores propios se usan como bg-noche, text-tinta, bg-etiqueta, etc.
+ * Las variables de fuente las define next/font en layout.tsx.
+ */
 @theme inline {
-  --font-header: var(--font-pacifico), sans-serif;
-  --font-body: var(--font-shadows), sans-serif;
-  --animate-rotation: rotation 2s ease-in-out infinite;
+  --font-header: var(--font-pacifico), cursive;
+  --font-hand: var(--font-shadows), cursive;
+
+  --color-noche: #1b2559;
+  --color-oro: #f5b93b;
+  --color-tinta: #3b2a1e;
+  --color-etiqueta: #fffaf0;
+  --color-sello: #b91c1c;
+
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
 }
 
-@keyframes rotation {
+@keyframes twinkle {
   0%,
   100% {
-    transform: rotate(0deg);
+    opacity: 0.8;
+    transform: scale(1);
   }
   50% {
-    transform: rotate(180deg);
+    opacity: 1;
+    transform: scale(1.08);
   }
 }
 
@@ -29,8 +42,10 @@
     border: 1px solid grey;
   }
 
-  dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
+  /* Foco visible para navegación con teclado, con contraste sobre cualquier fondo */
+  :where(a, button, input, textarea, [tabindex]):focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 3px;
   }
 
   /* Los diálogos nativos no se centran solos con el reset de Tailwind */
@@ -38,8 +53,55 @@
     margin: auto;
   }
 
+  dialog::backdrop {
+    background: rgba(59, 42, 30, 0.55);
+  }
+
   /* Bloquea el scroll del fondo mientras haya un diálogo abierto */
   body:has(dialog[open]) {
     overflow: hidden;
+  }
+}
+
+@layer components {
+  /*
+   * Etiqueta de regalo: esquinas superiores cortadas y un agujero para el
+   * cordel. Se hace con clip-path + máscara, así la sombra (drop-shadow del
+   * contenedor) sigue la silueta y el agujero deja ver el fondo.
+   */
+  .etiqueta-forma {
+    clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%, 0 14px);
+    -webkit-mask-image: radial-gradient(circle 7px at 50% 24px, transparent 6.5px, #000 7.5px);
+    mask-image: radial-gradient(circle 7px at 50% 24px, transparent 6.5px, #000 7.5px);
+  }
+
+  /*
+   * Papel de carta: líneas azules cada 2 rem (el texto usa leading-8 para
+   * apoyarse en ellas) y margen rojo a la izquierda.
+   */
+  .papel-carta {
+    --margen: 1.75rem;
+    background-color: #fffbeb;
+    background-image:
+      linear-gradient(
+        to right,
+        transparent var(--margen),
+        rgb(220 38 38 / 0.35) var(--margen),
+        rgb(220 38 38 / 0.35) calc(var(--margen) + 2px),
+        transparent calc(var(--margen) + 2px)
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0 calc(2rem - 1px),
+        rgb(59 130 246 / 0.25) calc(2rem - 1px) 2rem
+      );
+    background-position: 0 0, 0 1.25rem;
+    padding-left: calc(var(--margen) + 1rem);
+  }
+
+  @media (min-width: 40rem) {
+    .papel-carta {
+      --margen: 3.5rem;
+    }
   }
 }

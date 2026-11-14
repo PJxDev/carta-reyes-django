@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { SafeImage } from './SafeImage'
 
 const arrow =
-  'absolute top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-orange-500/60 pb-1 font-header text-xl text-zinc-900 hover:bg-orange-500/80'
+  'absolute top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-etiqueta/90 pb-1 text-xl font-bold text-tinta shadow hover:bg-white'
 
 export function ImageCarousel({ images, name }: { images: string[]; name: string }) {
   const [index, setIndex] = useState(0)
@@ -18,7 +18,7 @@ export function ImageCarousel({ images, name }: { images: string[]; name: string
       aria-label={`Imágenes de ${name}`}
     >
       <div
-        className="flex transition-transform duration-500 ease-in-out"
+        className="flex transition-transform duration-500 ease-in-out motion-reduce:transition-none"
         style={{ transform: `translateX(${index * -100}%)` }}
       >
         {images.map((src, i) => (

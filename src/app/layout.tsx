@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${pacifico.variable} ${shadowsIntoLight.variable} text-zinc-900`}
+        className={`${pacifico.variable} ${shadowsIntoLight.variable} text-tinta`}
       >
         <div className="bg-orange-100 min-h-screen flex flex-col">
           <SiteHeader />
