@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+/* Tipografías: las variables las define next/font en layout.tsx */
+@theme inline {
+  --font-header: var(--font-pacifico), sans-serif;
+  --font-body: var(--font-shadows), sans-serif;
+  --animate-rotation: rotation 2s ease-in-out infinite;
+}
+
+@keyframes rotation {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+@layer base {
+  /* Tailwind 4 ya no pone cursor:pointer en los botones */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input,
+  textarea {
+    border: 1px solid grey;
+  }
+
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Bloquea el scroll del fondo mientras haya un diálogo abierto */
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
+}
