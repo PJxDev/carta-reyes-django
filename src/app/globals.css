@@ -33,6 +33,11 @@
     background: rgba(0, 0, 0, 0.5);
   }
 
+  /* Los diálogos nativos no se centran solos con el reset de Tailwind */
+  dialog {
+    margin: auto;
+  }
+
   /* Bloquea el scroll del fondo mientras haya un diálogo abierto */
   body:has(dialog[open]) {
     overflow: hidden;
