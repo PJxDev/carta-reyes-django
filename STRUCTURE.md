@@ -1,11 +1,10 @@
 # Estructura del proyecto
 
-La columna **Fase** indica en qué fase se incorpora o se modifica cada archivo.
-Lo marcado con 🗑️ es código Django que se elimina en la fase 4.
+La columna **Fase** indica en qué fase se incorporó o modificó cada archivo.
 
 ```
 carta-reyes/
-├── README.md                    Guía general y estado de la migración      (1+)
+├── README.md                    Guía general     (1+)
 ├── STRUCTURE.md                 Este documento                              (1+)
 ├── SCHEMA.md                    Esquema de la hoja de cálculo               (1+)
 ├── package.json                 Dependencias y scripts                      (1+)
@@ -75,12 +74,6 @@ carta-reyes/
 │       └── import/django-dump.ts Importador de dumpdata                     (2)
 ├── scripts/                     sheet:setup e import:django                 (2)
 ├── tests/                       81 tests + simulador de Google              (2,3)
-│
-├── cartareyes/  🗑️              Proyecto Django (settings, urls, wsgi…)
-├── cartas/      🗑️              App Django (modelos, vistas, plantillas…)
-├── manage.py    🗑️
-├── requirements.txt  🗑️
-└── build.sh     🗑️
 ```
 
 ## Convenciones

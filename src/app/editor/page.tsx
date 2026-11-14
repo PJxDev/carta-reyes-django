@@ -17,7 +17,7 @@ export default async function EditorPage() {
     <>
       <CartaIntro />
       <section className="flex min-w-full flex-1 flex-col items-center justify-center gap-4 bg-emerald-100/75 p-4 text-black sm:p-7">
-        <h2 className="text-center text-2xl">Carta de {user.username}:</h2>
+        <h2 className="max-w-full text-center text-2xl [overflow-wrap:anywhere]">Carta de {user.username}:</h2>
         {productos.length === 0 && (
           <p className="text-center text-lg">Tu carta está vacía. ¡Añade tu primer regalo!</p>
         )}

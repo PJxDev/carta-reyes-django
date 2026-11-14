@@ -38,17 +38,18 @@ export function Modal({ open, onClose, title, children, className = 'max-w-lg' }
         // Con padding 0 en <dialog>, solo la capa de fondo llega con target === dialog.
         if (event.target === event.currentTarget) onClose()
       }}
-      className={`m-auto w-[calc(100%-1.5rem)] ${className} rounded-lg bg-white p-0 text-zinc-900 shadow-md`}
+      className={`m-auto w-[calc(100%-1.5rem)] ${className} relative overflow-clip rounded-lg bg-white p-0 text-zinc-900 shadow-md`}
     >
-      <div className="relative max-h-[calc(100dvh-1.5rem)] overflow-y-auto overscroll-contain p-5 pt-14 sm:p-8 sm:pt-14">
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Cerrar"
-          className="absolute right-1 top-1 rounded-full transition-transform hover:scale-110"
-        >
-          <CloseCircleIcon />
-        </button>
+      {/* El botón va fuera de la zona con scroll para no desaparecer al desplazarse */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Cerrar"
+        className="absolute right-1 top-1 z-10 rounded-full bg-white transition-transform hover:scale-110"
+      >
+        <CloseCircleIcon />
+      </button>
+      <div className="max-h-[calc(100dvh-1.5rem)] overflow-y-auto overscroll-contain p-5 pt-14 sm:p-8 sm:pt-14">
         {open ? children : null}
       </div>
     </dialog>

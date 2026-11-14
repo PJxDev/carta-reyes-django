@@ -24,7 +24,7 @@ export default async function CartaPage({ params }: Props) {
     <>
       <CartaIntro />
       <section className="flex min-w-full flex-1 flex-col items-center justify-center gap-4 bg-blue-100/90 p-4 text-black sm:p-7">
-        <h2 className="text-center text-2xl">Carta de {carta.owner.username}:</h2>
+        <h2 className="max-w-full text-center text-2xl [overflow-wrap:anywhere]">Carta de {carta.owner.username}:</h2>
         {!viewer && (
           <p className="text-center text-lg">
             <Link href="/login" className="font-semibold underline">

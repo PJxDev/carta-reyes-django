@@ -16,7 +16,7 @@ export default async function HomePage() {
   const button = 'min-h-12 rounded-full px-6 py-3 text-xl font-semibold transition-transform hover:scale-105'
   return (
     <section className="flex flex-col items-center gap-5 px-4 text-center">
-      <h2 className="text-3xl font-semibold">¡Hola, {user.username}!</h2>
+      <h2 className="max-w-full text-3xl font-semibold [overflow-wrap:anywhere]">¡Hola, {user.username}!</h2>
       <div className="flex flex-wrap justify-center gap-3">
         <Link href="/editor" className={`${button} bg-emerald-200`}>
           Editar mi carta

@@ -14,7 +14,7 @@ export function AddProduct() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="Añadir producto"
-        className="rounded-full transition-transform hover:scale-110"
+        className="flex size-11 items-center justify-center rounded-full transition-transform hover:scale-110"
       >
         <PlusCircleIcon />
       </button>

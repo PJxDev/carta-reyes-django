@@ -22,9 +22,12 @@ export function ProductCard({ product, corner, showOwner = false, children }: Pr
       {corner}
       <PillButton id={product.id} status={product.status} />
 
-      <h3 className="break-words text-center text-2xl font-bold [overflow-wrap:anywhere]">{product.name}</h3>
+      {/* Con botón de esquina (44 px) el título baja para no quedar debajo */}
+      <h3 className={`text-center text-2xl font-bold [overflow-wrap:anywhere] ${corner ? 'mt-6' : ''}`}>
+        {product.name}
+      </h3>
       {showOwner && product.ownerUsername && (
-        <span className="text-center text-lg">({product.ownerUsername})</span>
+        <span className="text-center text-lg [overflow-wrap:anywhere]">({product.ownerUsername})</span>
       )}
 
       <div className="flex min-h-[24rem] flex-col justify-between gap-4 text-left">
