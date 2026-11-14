@@ -1,5 +1,5 @@
 import type { Repos } from '../repos/index.ts'
-import type { Producto, Usuario } from '../types.ts'
+import type { Prioridad, Producto, Usuario } from '../types.ts'
 
 /**
  * Estado de un regalo tal y como lo ve quien mira la carta:
@@ -17,6 +17,8 @@ export interface ProductoView {
   description: string
   links: string[]
   images: string[]
+  price: number | null
+  priority: Prioridad | null
   /** Solo se rellena en "pillados" (de quién es el regalo). */
   ownerUsername?: string
   status: PillStatus
@@ -34,6 +36,8 @@ const toView = (p: Producto, status: PillStatus, ownerUsername?: string): Produc
   description: p.description,
   links: p.links,
   images: p.images,
+  price: p.price,
+  priority: p.priority,
   status,
   ...(ownerUsername ? { ownerUsername } : {})
 })
@@ -72,4 +76,28 @@ export async function loadPillados(repos: Repos, viewer: Usuario): Promise<Produ
   ])
   const names = new Map(usuarios.map((u) => [u.id, u.username]))
   return productos.map((p) => toView(p, 'mine', names.get(p.userId) ?? '(usuario eliminado)'))
+}
+
+export interface FollowedCarta {
+  username: string
+  giftCount: number
+}
+
+/** Cartas que sigue `viewer`, de la más recién seguida a la más antigua. Las cuentas borradas se omiten. */
+export async function loadFollowing(repos: Repos, viewer: Usuario): Promise<FollowedCarta[]> {
+  const follows = await repos.seguidos.listFollowed(viewer.id)
+  const cartas = await Promise.all(
+    follows.map(async (follow) => {
+      const owner = await repos.usuarios.findById(follow.followedId)
+      if (!owner) return null
+      return { username: owner.username, giftCount: (await repos.productos.listByUser(owner.id)).length }
+    })
+  )
+  return cartas.filter((c): c is FollowedCarta => c !== null)
+}
+
+/** Cuántos regalos tiene una carta, o null si el usuario no existe. Para las vistas previas al compartir. */
+export async function countGifts(repos: Repos, username: string): Promise<number | null> {
+  const owner = await repos.usuarios.findByUsername(username)
+  return owner ? (await repos.productos.listByUser(owner.id)).length : null
 }

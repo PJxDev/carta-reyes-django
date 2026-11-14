@@ -1,3 +1,4 @@
+import { ReyesCountdown } from './ReyesCountdown'
 import { HERO_IMAGE_ALT, HERO_IMAGE_URL } from '@/lib/site'
 
 /** Posiciones fijas (no aleatorias) para que el servidor y el navegador pinten lo mismo. */
@@ -68,6 +69,7 @@ export function Hero() {
         <h1 className="font-header text-3xl text-amber-50 [text-shadow:0_2px_14px_rgb(27_37_89/0.9)] sm:text-4xl md:text-5xl">
           Queridos Reyes Magos ...
         </h1>
+        <ReyesCountdown />
       </div>
     </div>
   )

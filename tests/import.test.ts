@@ -52,7 +52,7 @@ test('importa usuarios (conservando ids y hashes) y productos con sus relaciones
   assert.deepEqual(bici, {
     id: '10', userId: '1', name: 'Bici', description: 'roja',
     links: ['https://a.com', 'https://b.com'], images: ['https://i.com/1.jpg'],
-    createdAt: '2024-12-05T12:00:00.000Z', pilladoUserId: '2'
+    createdAt: '2024-12-05T12:00:00.000Z', pilladoUserId: '2', price: null, priority: null
   })
   const libro = await repos.productos.findById('11')
   assert.deepEqual([libro?.description, libro?.links, libro?.images, libro?.pilladoUserId], ['', [], ['https://i.com/2.jpg'], null])
@@ -84,7 +84,7 @@ test('es idempotente: repetirlo no duplica nada', async () => {
 
 test('si el id numérico ya lo usa otro usuario, se asigna uno nuevo y los productos siguen al usuario correcto', async () => {
   const { repos } = makeRepos()
-  await repos.usuarios.createMany([{ id: '1', username: 'otra-persona', passwordHash: 'h', createdAt: '2024-01-01T00:00:00.000Z' }])
+  await repos.usuarios.createMany([{ id: '1', username: 'otra-persona', passwordHash: 'h', email: '', resetHash: '', resetExpires: '', createdAt: '2024-01-01T00:00:00.000Z' }])
   await importDjangoDump(dump(), repos)
   const pedro = await repos.usuarios.findByUsername('pedro')
   assert.notEqual(pedro?.id, '1')

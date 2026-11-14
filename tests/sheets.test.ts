@@ -108,10 +108,10 @@ test('lectura: se recortan las celdas vacías del final pero las filas llegan co
   const { repos, google } = setup()
   const user = await repos.usuarios.create({ username: 'ana', passwordHash: 'h' })
   assert.ok(user.status === 'created')
-  const p = await repos.productos.create(user.usuario.id, { name: 'Solo nombre', description: '', links: [], images: [] })
+  const p = await repos.productos.create(user.usuario.id, { name: 'Solo nombre', description: '', links: [], images: [], price: null, priority: null })
   // la API de Sheets omite las celdas finales vacías, pero el repositorio no se entera
-  assert.deepEqual(google.tabs.get('productos')!.rows.at(-1)!.slice(3), ['', '', '', p.createdAt, ''])
-  assert.deepEqual(await repos.productos.findById(p.id), { ...p, description: '', links: [], images: [], pilladoUserId: null })
+  assert.deepEqual(google.tabs.get('productos')!.rows.at(-1)!.slice(3), ['', '', '', p.createdAt, '', '', ''])
+  assert.deepEqual(await repos.productos.findById(p.id), { ...p, description: '', links: [], images: [], pilladoUserId: null, price: null, priority: null })
 })
 
 test('flujo completo sobre la API simulada: alta, edición, pillar, liberar y borrar', async () => {

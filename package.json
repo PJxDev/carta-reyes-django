@@ -16,6 +16,7 @@
     "import:django": "node --env-file-if-exists=.env.local scripts/import-django-dump.ts"
   },
   "dependencies": {
+    "@vercel/blob": ">=1.0.0",
     "next": "^16.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

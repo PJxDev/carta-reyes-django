@@ -13,5 +13,7 @@ export const PRODUCT_INPUT = {
   name: 'Bicicleta',
   description: 'Roja, talla M',
   links: ['https://tienda.example/bici'],
-  images: ['https://img.example/bici.jpg']
+  images: ['https://img.example/bici.jpg'],
+  price: null,
+  priority: null
 }

@@ -15,6 +15,13 @@ export interface UsuariosRepo {
   /** Crea un usuario garantizando que el nombre es único (sin distinguir mayúsculas). */
   create(input: { username: string; passwordHash: string }): Promise<CreateUsuarioResult>
   setPasswordHash(id: string, passwordHash: string): Promise<void>
+  findByEmail(email: string): Promise<Usuario | null>
+  /** Guarda (o borra, con '') el email. Devuelve 'email_taken' si lo usa otra cuenta. */
+  setEmail(id: string, email: string): Promise<'ok' | 'email_taken' | 'not_found'>
+  /** Guarda el hash del token de recuperación y su caducidad. */
+  setReset(id: string, resetHash: string, resetExpires: string): Promise<void>
+  /** Cambia la contraseña y anula cualquier token de recuperación pendiente. */
+  resetPassword(id: string, passwordHash: string): Promise<void>
   /** Inserción masiva sin comprobar duplicados; la usa el importador. */
   createMany(usuarios: Usuario[]): Promise<void>
   all(): Promise<Usuario[]>
@@ -42,6 +49,9 @@ export function createUsuariosRepo(table: Table): UsuariosRepo {
         id: randomUUID(),
         username: normalizeUsername(username),
         passwordHash,
+        email: '',
+        resetHash: '',
+        resetExpires: '',
         createdAt: new Date().toISOString()
       }
       const outcome = await table.insert([usuarioToRow(usuario)], {
@@ -55,6 +65,36 @@ export function createUsuariosRepo(table: Table): UsuariosRepo {
 
     async setPasswordHash(id, passwordHash) {
       await table.update(id, () => ({ password_hash: passwordHash }))
+    },
+
+    async findByEmail(email) {
+      const wanted = email.trim().toLowerCase()
+      if (wanted === '') return null
+      const row = (await table.all()).find((r) => (r.email ?? '').trim().toLowerCase() === wanted)
+      return row ? rowToUsuario(row) : null
+    },
+
+    async setEmail(id, email) {
+      const wanted = email.trim().toLowerCase()
+      // Comprobación de unicidad "de mejor esfuerzo": la lectura puede venir de la caché de 5 s.
+      if (wanted !== '') {
+        const owner = (await table.all()).find((r) => (r.email ?? '').trim().toLowerCase() === wanted)
+        if (owner && owner.id !== id) return 'email_taken'
+      }
+      const outcome = await table.update(id, () => ({ email: wanted }))
+      return outcome.status === 'not_found' ? 'not_found' : 'ok'
+    },
+
+    async setReset(id, resetHash, resetExpires) {
+      await table.update(id, () => ({ reset_hash: resetHash, reset_expires: resetExpires }))
+    },
+
+    async resetPassword(id, passwordHash) {
+      await table.update(id, () => ({
+        password_hash: passwordHash,
+        reset_hash: '',
+        reset_expires: ''
+      }))
     },
 
     async createMany(usuarios) {

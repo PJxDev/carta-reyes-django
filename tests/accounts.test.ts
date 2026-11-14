@@ -52,7 +52,7 @@ test('login: mismo mensaje si el usuario no existe o la contraseña es mala', as
 
 test('login con hash de Django: entra y el hash se actualiza a scrypt', async () => {
   const { repos } = makeRepos()
-  await repos.usuarios.createMany([{ id: '1', username: 'pedro', passwordHash: DJANGO_HASH, createdAt: '2024-01-01T00:00:00.000Z' }])
+  await repos.usuarios.createMany([{ id: '1', username: 'pedro', passwordHash: DJANGO_HASH, email: '', resetHash: '', resetExpires: '', createdAt: '2024-01-01T00:00:00.000Z' }])
   assert.ok((await authenticate(repos, { username: 'pedro', password: 'contraseña-secreta' })).ok)
   const after = await repos.usuarios.findById('1')
   assert.match(after!.passwordHash, /^scrypt\$/)
@@ -62,7 +62,7 @@ test('login con hash de Django: entra y el hash se actualiza a scrypt', async ()
 
 test('login: usuario importado con contraseña inutilizable de Django no puede entrar', async () => {
   const { repos } = makeRepos()
-  await repos.usuarios.createMany([{ id: '1', username: 'pedro', passwordHash: '!abcdef', createdAt: '2024-01-01T00:00:00.000Z' }])
+  await repos.usuarios.createMany([{ id: '1', username: 'pedro', passwordHash: '!abcdef', email: '', resetHash: '', resetExpires: '', createdAt: '2024-01-01T00:00:00.000Z' }])
   assert.equal((await authenticate(repos, { username: 'pedro', password: '!abcdef' })).ok, false)
   assert.equal((await authenticate(repos, { username: 'pedro', password: '' })).ok, false)
   void hashPassword

@@ -98,3 +98,33 @@ export function getSessionSecret(env: Env = process.env): string {
   }
   return secret
 }
+
+export interface MailConfig {
+  apiKey: string
+  /** Remitente, p. ej. `Carta de Reyes <hola@tudominio.com>`. */
+  from: string
+}
+
+/** Configuración de Resend, o null si no hay clave (el envío no está disponible). */
+export function loadMailConfig(env: Env = process.env): MailConfig | null {
+  const apiKey = env.RESEND_API_KEY?.trim()
+  if (!apiKey) return null
+  return { apiKey, from: env.MAIL_FROM?.trim() || 'Carta de Reyes <onboarding@resend.dev>' }
+}
+
+/**
+ * URL pública de la web para construir enlaces de los emails. Nunca se deduce
+ * de la petición en producción: un `Host` manipulado podría apuntar el enlace
+ * de recuperación a otro sitio.
+ */
+export function getSiteUrl(env: Env = process.env): string | null {
+  const explicit = env.SITE_URL?.trim()
+  if (explicit) return explicit.replace(/\/+$/, '')
+  const vercel = env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+  if (vercel) return `https://${vercel.replace(/^https?:\/\//, '').replace(/\/+$/, '')}`
+  return null
+}
+
+/** ¿Está configurada la subida de imágenes (Vercel Blob)? */
+export const isUploadConfigured = (env: Env = process.env): boolean =>
+  Boolean(env.BLOB_READ_WRITE_TOKEN?.trim())

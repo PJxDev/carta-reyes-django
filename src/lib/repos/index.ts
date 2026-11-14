@@ -2,18 +2,22 @@ import { getStore } from '../store/index.ts'
 import type { Store } from '../store/index.ts'
 import { createProductosRepo } from './productos.ts'
 import type { ProductosRepo } from './productos.ts'
+import { createSeguidosRepo } from './seguidos.ts'
+import type { SeguidosRepo } from './seguidos.ts'
 import { createUsuariosRepo } from './usuarios.ts'
 import type { UsuariosRepo } from './usuarios.ts'
 
 export interface Repos {
   usuarios: UsuariosRepo
   productos: ProductosRepo
+  seguidos: SeguidosRepo
 }
 
 export function createRepos(store: Store): Repos {
   return {
     usuarios: createUsuariosRepo(store.usuarios),
-    productos: createProductosRepo(store.productos)
+    productos: createProductosRepo(store.productos),
+    seguidos: createSeguidosRepo(store.seguidos)
   }
 }
 

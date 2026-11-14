@@ -90,6 +90,9 @@ export async function importDjangoDump(
       id,
       username,
       passwordHash: asString(entry.fields.password),
+      email: '',
+      resetHash: '',
+      resetExpires: '',
       createdAt: toIso(entry.fields.date_joined)
     }
     newUsers.push(usuario)
@@ -138,7 +141,9 @@ export async function importDjangoDump(
       links: clean(toList(entry.fields.links), 'enlaces'),
       images: clean(toList(entry.fields.images), 'imágenes'),
       createdAt: toIso(entry.fields.created),
-      pilladoUserId
+      pilladoUserId,
+      price: null,
+      priority: null
     })
   }
 

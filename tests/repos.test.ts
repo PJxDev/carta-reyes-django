@@ -132,7 +132,7 @@ test('al leer, las celdas editadas a mano se interpretan con tolerancia y sin UR
   assert.deepEqual(m1.images, ['https://i.com/1.png'])
   assert.deepEqual([m2.links, m2.images], [[], []])
   assert.deepEqual({ ...m3, createdAt: '' }, {
-    id: 'm3', userId: ana.id, name: 'Corto', description: '', links: [], images: [], createdAt: '', pilladoUserId: null
+    id: 'm3', userId: ana.id, name: 'Corto', description: '', links: [], images: [], createdAt: '', pilladoUserId: null, price: null, priority: null
   })
 })
 

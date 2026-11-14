@@ -66,6 +66,33 @@ export function ProductForm({ product, title, submitLabel, onSaved, extraAction 
         className="w-full rounded-md bg-white p-2 text-lg"
       />
 
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <label className="flex flex-col gap-1 text-lg">
+          Precio aproximado (€)
+          <input
+            name="price"
+            type="text"
+            inputMode="decimal"
+            defaultValue={product?.price ?? ''}
+            placeholder="Opcional, p. ej. 25"
+            className="w-full rounded-md bg-white p-2 text-lg"
+          />
+        </label>
+        <label className="flex flex-col gap-1 text-lg">
+          ¿Cuánta ilusión te hace?
+          <select
+            name="priority"
+            defaultValue={product?.priority ?? ''}
+            className="min-h-11 w-full rounded-md bg-white p-2 text-lg"
+          >
+            <option value="">Sin indicar</option>
+            <option value="alta">Mucha ilusión</option>
+            <option value="media">Ilusión media</option>
+            <option value="baja">Si se puede</option>
+          </select>
+        </label>
+      </div>
+
       <UrlListField name="links" label="Enlaces de compra:" kind="link" initial={product?.links} />
       <UrlListField name="images" label="Imágenes:" kind="image" initial={product?.images} />
 

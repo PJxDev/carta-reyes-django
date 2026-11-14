@@ -1,5 +1,6 @@
 import type { Row } from '../store/table.ts'
-import type { Producto, Usuario } from '../types.ts'
+import { PRIORIDADES } from '../types.ts'
+import type { Prioridad, Producto, Seguimiento, Usuario } from '../types.ts'
 import { isHttpUrl } from '../validation.ts'
 
 /**
@@ -31,11 +32,33 @@ export function parseStoredList(cell: string | undefined): string[] {
 export const serializeList = (list: readonly string[]): string =>
   list.length === 0 ? '' : JSON.stringify(list)
 
+/** Precio guardado en una celda; tolera la coma decimal de quien edite la hoja a mano. */
+export function parseStoredPrice(cell: string | undefined): number | null {
+  const text = (cell ?? '').trim().replace(',', '.')
+  if (text === '') return null
+  const value = Number(text)
+  return Number.isFinite(value) && value >= 0 ? value : null
+}
+
+export const serializePrice = (price: number | null): string => (price === null ? '' : String(price))
+
+export function parseStoredPriority(cell: string | undefined): Prioridad | null {
+  const text = (cell ?? '').trim().toLowerCase()
+  return (PRIORIDADES as readonly string[]).includes(text) ? (text as Prioridad) : null
+}
+
+export function rowToSeguimiento(row: Row): Seguimiento {
+  return { userId: row.user_id, followedId: row.followed_id, createdAt: row.created_at }
+}
+
 export function rowToUsuario(row: Row): Usuario {
   return {
     id: row.id,
     username: row.username,
     passwordHash: row.password_hash,
+    email: (row.email ?? '').trim().toLowerCase(),
+    resetHash: row.reset_hash ?? '',
+    resetExpires: row.reset_expires ?? '',
     createdAt: row.created_at
   }
 }
@@ -45,7 +68,10 @@ export function usuarioToRow(usuario: Usuario): Row {
     id: usuario.id,
     username: usuario.username,
     password_hash: usuario.passwordHash,
-    created_at: usuario.createdAt
+    created_at: usuario.createdAt,
+    email: usuario.email,
+    reset_hash: usuario.resetHash,
+    reset_expires: usuario.resetExpires
   }
 }
 
@@ -58,7 +84,9 @@ export function rowToProducto(row: Row): Producto {
     links: parseStoredList(row.links),
     images: parseStoredList(row.images),
     createdAt: row.created_at,
-    pilladoUserId: row.pillado_user_id ? row.pillado_user_id : null
+    pilladoUserId: row.pillado_user_id ? row.pillado_user_id : null,
+    price: parseStoredPrice(row.price),
+    priority: parseStoredPriority(row.priority)
   }
 }
 
@@ -71,6 +99,8 @@ export function productoToRow(producto: Producto): Row {
     links: serializeList(producto.links),
     images: serializeList(producto.images),
     created_at: producto.createdAt,
-    pillado_user_id: producto.pilladoUserId ?? ''
+    pillado_user_id: producto.pilladoUserId ?? '',
+    price: serializePrice(producto.price),
+    priority: producto.priority ?? ''
   }
 }

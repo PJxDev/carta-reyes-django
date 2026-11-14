@@ -5,7 +5,7 @@ Aplicación web para crear tu carta a los Reyes Magos, compartirla con un enlace
 repitan.
 
 > El proyecto nació como Django + PostgreSQL y se ha migrado a
-> **Next.js + Google Sheets** en cinco fases, cada una entregada como un patch
+> **Next.js + Google Sheets** en seis fases, cada una entregada como un patch
 > (`git am`). El código Django ya no está en el árbol; sigue disponible en el
 > historial de git (ver "Migrar los datos de Django").
 
@@ -18,6 +18,7 @@ repitan.
 | 3 | Páginas y lógica de negocio: registro, login, editor, carta pública, pillados (Server Actions, componentes cliente) | ✅ hecha |
 | 4 | Auditoría de responsive y corrección de fallos de diseño; retirada del código Django | ✅ hecha |
 | 5 | Mejora de diseño conservando la identidad: etiquetas de regalo, carta en papel pautado, portada ilustrada, sello de «PILLADO» | ✅ hecha |
+| 6 | Recuperar contraseña (email opcional + Resend), subida de imágenes (Vercel Blob), precio y prioridad, compartir (WhatsApp, vista previa), seguir cartas y visitadas recientes, modo oscuro, accesibilidad y detalles de Reyes | ✅ hecha (ver «Qué falta por verificar») |
 
 ## Stack
 
@@ -92,7 +93,11 @@ Las contraseñas de Django siguen funcionando y se actualizan a scrypt en el pri
 | `/editor` | `editor` | `app/editor` | con sesión |
 | `/editor/crear_producto`, `/editor/editar_producto` | formularios POST | `saveProductoAction` | con sesión |
 | `/pillados` | `pillados` | `app/pillados` | con sesión |
-| `/<usuario>` | `carta` | `app/[username]` | público |
+| `/<usuario>` | `carta` | `app/[username]` (+ vista previa Open Graph) | público |
+| `/siguiendo` | — | `app/siguiendo` | con sesión |
+| `/cuenta` | — | `app/cuenta` + `saveEmailAction` | con sesión |
+| `/recuperar` | — | `app/recuperar` + `forgotPasswordAction` | público |
+| `/restablecer?token=…` | — | `app/restablecer` + `resetPasswordAction` | público con enlace válido |
 | `/api/pillar_producto/<id>/` | JSON + CSRF | `pillarProductoAction` | con sesión |
 | `/api/despillar_producto/<id>/` | JSON + CSRF | `despillarProductoAction` | con sesión |
 | `/api/borrar_producto/<id>/` | JSON + CSRF | `deleteProductoAction` | con sesión |
@@ -143,6 +148,66 @@ los botones verde / rojo / azul. Lo que cambia es el acabado:
 - `loading.tsx`, `not-found` y `error` con el mismo estilo.
 
 Tokens de color: `noche #1b2559`, `oro #f5b93b`, `tinta #3b2a1e`, `etiqueta #fffaf0`, `sello #b91c1c`.
+
+## Novedades de la fase 6
+
+**Actualizar una hoja ya creada:** ejecuta `npm run sheet:setup`. Añade las columnas
+nuevas (`email`, `reset_hash`, `reset_expires` en `usuarios`; `price`, `priority` en
+`productos`) y la pestaña `seguidos` sin tocar tus datos. Hasta entonces la app
+avisa de qué columnas faltan.
+
+**Variables nuevas** (todas opcionales, ver `.env.example`):
+
+| Variable | Para qué |
+| -------- | -------- |
+| `SITE_URL` | Dirección pública de la web. Va en los enlaces de los emails y en las vistas previas. En Vercel, si falta, se usa `VERCEL_PROJECT_PRODUCTION_URL`. En producción **no** se deduce de la petición (un `Host` manipulado podría desviar el enlace de recuperación). |
+| `RESEND_API_KEY`, `MAIL_FROM` | Envío de emails con [Resend](https://resend.com). Sin clave, en desarrollo el enlace se escribe en la consola del servidor; en producción la recuperación avisa de que el envío no está configurado. `MAIL_FROM` debe ser un remitente verificado en Resend. |
+| `BLOB_READ_WRITE_TOKEN` | Activa «Subir una foto» (tienda **pública** de Vercel Blob). Sin él sigue valiendo pegar URLs. |
+
+**Recuperar contraseña.** El email es opcional (al registrarse o en «Mi cuenta»). El
+enlace vale 1 hora y se puede pedir como mucho cada 2 minutos por cuenta. En la hoja
+solo se guarda el **hash** del secreto; usarlo (o pedir otro) lo invalida. La respuesta
+es la misma exista o no la cuenta. Un email solo puede pertenecer a una cuenta.
+
+**Imágenes.** El navegador reduce la foto (lado mayor 1280 px, JPEG) y el servidor
+comprueba por el contenido que es JPG, PNG o WebP y que pesa ≤ 2 MB antes de subirla.
+Los archivos quedan en Blob; la hoja solo guarda la URL. Una foto subida y luego
+quitada del regalo no se borra de Blob.
+
+**Precio y prioridad.** Opcionales. El precio es aproximado en euros (`24,95` o `25`) y
+la prioridad se muestra siempre con texto («★ Mucha ilusión», «Ilusión media», «Si se puede»).
+
+**Compartir.** Botones de WhatsApp, «Compartir…» del móvil y copiar enlace. Al pegar el
+enlace en WhatsApp u otras apps sale una vista previa con el nombre y el número de
+regalos (nunca quién pilló qué).
+
+**Seguir y visitadas.** «Seguir esta carta» se guarda en la hoja (pestaña `seguidos`) y
+sale en `/siguiendo` desde cualquier dispositivo. Las **visitadas** se guardan solo en
+el navegador (`localStorage`, 12 como máximo y 6 meses), sin escribir en la hoja en cada
+visita; salen en la home y en `/siguiendo`, y se pueden quitar una a una.
+
+**Modo oscuro.** El interruptor de la cabecera alterna automático → claro → oscuro y
+recuerda la elección en el navegador; en «automático» sigue al sistema. En oscuro cambian
+el fondo y las secciones, pero etiquetas, carta y formularios siguen siendo papel con
+tinta oscura. Los colores del tema están como variables en `globals.css`.
+
+**Accesibilidad.** Enlace «Saltar al contenido», un único `h1` por página, página actual
+marcada con `aria-current`, foco visible (anillo azul con halo blanco, válido en ambos
+temas), objetivos táctiles ≥ 44 px, `prefers-reduced-motion` respetado. Contraste medido
+(WCAG AA) en todas las páginas de la maqueta, en claro y oscuro.
+
+**Detalles.** Cuenta atrás hasta el 6 de enero en la portada (se calcula en el navegador),
+sello «PILLADO» que se estampa una vez al cargar y una línea de pie para Melchor, Gaspar y Baltasar.
+
+**Qué falta por verificar.** No se ha podido ejecutar `next build` ni probar con servicios
+reales: Resend, Vercel Blob (se usa `@vercel/blob`, declarado como `>=1.0.0`; fija la
+versión que instales), la imagen Open Graph (`next/og`) y Google Sheets. Los `.tsx` se han
+compilado con esbuild y probado en Chromium, pero no pasan por `tsc` en este entorno
+(sí `src/lib`, `scripts` y `tests`). Conviene ejecutar `npm run typecheck && npm run build`.
+
+**Límites conocidos.** No hay límite de intentos en el login ni de subidas por usuario;
+las sesiones ya abiertas siguen valiendo tras cambiar la contraseña (la cookie es
+sin estado); la unicidad del email es «de mejor esfuerzo» (usa la lectura en caché).
 
 ## Responsive: qué se auditó y qué se corrigió
 

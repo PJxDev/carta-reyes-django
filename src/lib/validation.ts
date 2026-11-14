@@ -1,4 +1,5 @@
-import type { ProductoInput } from './types.ts'
+import { PRIORIDADES } from './types.ts'
+import type { Prioridad, ProductoInput } from './types.ts'
 
 /** Rutas que no pueden usarse como nombre de usuario porque colisionan con páginas. */
 export const RESERVED_USERNAMES: ReadonlySet<string> = new Set([
@@ -7,6 +8,10 @@ export const RESERVED_USERNAMES: ReadonlySet<string> = new Set([
   'registro',
   'editor',
   'pillados',
+  'siguiendo',
+  'cuenta',
+  'recuperar',
+  'restablecer',
   'api',
   'admin',
   'static',
@@ -24,7 +29,9 @@ export const LIMITS = {
   nameMax: 200,
   descriptionMax: 2000,
   urlMax: 2000,
-  urlsPerList: 10
+  urlsPerList: 10,
+  emailMax: 254,
+  priceMax: 100000
 } as const
 
 export type Validated<T> = { ok: true; value: T } | { ok: false; error: string }
@@ -122,11 +129,46 @@ export function parseUrlList(raw: unknown, label: string): Validated<string[]> {
   return { ok: true, value: urls }
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+/** Email opcional: cadena vacía es válida y significa "sin email". */
+export function validateEmail(raw: unknown): Validated<string> {
+  const email = (typeof raw === 'string' ? raw : '').trim().toLowerCase()
+  if (email === '') return { ok: true, value: '' }
+  if (email.length > LIMITS.emailMax || !EMAIL_RE.test(email)) {
+    return fail('El email no parece válido')
+  }
+  return { ok: true, value: email }
+}
+
+/** Precio aproximado en euros. Acepta "12,5" y "12.50"; vacío = sin precio. */
+export function parsePrice(raw: unknown): Validated<number | null> {
+  if (raw === undefined || raw === null) return { ok: true, value: null }
+  if (typeof raw === 'number') raw = String(raw)
+  if (typeof raw !== 'string') return fail('Precio: formato no válido')
+  const text = raw.trim().replace(/\s*€$/, '').replace(',', '.')
+  if (text === '') return { ok: true, value: null }
+  if (!/^\d+(\.\d{1,2})?$/.test(text)) return fail('Precio: escribe un importe como 25 o 24,95')
+  const value = Number(text)
+  if (value > LIMITS.priceMax) return fail(`Precio: máximo ${LIMITS.priceMax} €`)
+  return { ok: true, value }
+}
+
+export function parsePriority(raw: unknown): Validated<Prioridad | null> {
+  if (raw === undefined || raw === null || raw === '') return { ok: true, value: null }
+  if (typeof raw === 'string' && (PRIORIDADES as readonly string[]).includes(raw)) {
+    return { ok: true, value: raw as Prioridad }
+  }
+  return fail('Prioridad: valor no válido')
+}
+
 export function validateProductoInput(input: {
   name?: unknown
   description?: unknown
   links?: unknown
   images?: unknown
+  price?: unknown
+  priority?: unknown
 }): Validated<ProductoInput> {
   const name = typeof input.name === 'string' ? input.name.trim() : ''
   if (name === '') return fail('El nombre es obligatorio')
@@ -144,8 +186,20 @@ export function validateProductoInput(input: {
   const images = parseUrlList(input.images, 'Imágenes')
   if (!images.ok) return images
 
+  const price = parsePrice(input.price)
+  if (!price.ok) return price
+  const priority = parsePriority(input.priority)
+  if (!priority.ok) return priority
+
   return {
     ok: true,
-    value: { name, description, links: links.value, images: images.value }
+    value: {
+      name,
+      description,
+      links: links.value,
+      images: images.value,
+      price: price.value,
+      priority: priority.value
+    }
   }
 }

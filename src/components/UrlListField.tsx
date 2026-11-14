@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import { uploadImageAction } from '@/app/actions/productos'
+import { shrinkImage } from '@/lib/client-image'
 import { LIMITS, isHttpUrl } from '@/lib/validation'
 import { shortDomain } from './LinksButton'
 import { SafeImage } from './SafeImage'
+import { useCanUpload } from './UploadContext'
 
 interface UrlListFieldProps {
   /** Nombre del campo oculto que se envía con el formulario (lista JSON). */
@@ -23,6 +26,29 @@ export function UrlListField({ name, label, kind, initial = [] }: UrlListFieldPr
   const [items, setItems] = useState<string[]>(initial)
   const [draft, setDraft] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [uploading, setUploading] = useState(false)
+  const fileInput = useRef<HTMLInputElement>(null)
+  const canUpload = useCanUpload() && kind === 'image'
+
+  const upload = async (file: File | undefined) => {
+    if (!file) return
+    if (items.length >= LIMITS.urlsPerList) return setError(`Máximo ${LIMITS.urlsPerList} imágenes`)
+    setUploading(true)
+    setError(null)
+    try {
+      const small = await shrinkImage(file)
+      const data = new FormData()
+      data.set('file', small)
+      const result = await uploadImageAction(data)
+      if (result.ok && result.url) setItems((current) => [...current, result.url!])
+      else setError(result.error ?? 'No se pudo subir la imagen')
+    } catch {
+      setError('No se pudo preparar la imagen. Prueba con otra foto (JPG, PNG o WebP).')
+    } finally {
+      setUploading(false)
+      if (fileInput.current) fileInput.current.value = ''
+    }
+  }
 
   const add = () => {
     const url = draft.trim()
@@ -78,6 +104,27 @@ export function UrlListField({ name, label, kind, initial = [] }: UrlListFieldPr
           Añadir
         </button>
       </div>
+      {canUpload && (
+        <div>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            aria-label="Elegir una foto de tu dispositivo"
+            className="sr-only"
+            id={`${name}-file`}
+            onChange={(event) => void upload(event.target.files?.[0])}
+          />
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => fileInput.current?.click()}
+            className="min-h-11 rounded-md border-2 border-sky-700 px-4 font-semibold text-sky-800 hover:bg-sky-50 disabled:opacity-60"
+          >
+            {uploading ? 'Subiendo…' : 'Subir una foto'}
+          </button>
+        </div>
+      )}
       {error && (
         <p role="alert" className="text-sm font-semibold text-red-700">
           {error}

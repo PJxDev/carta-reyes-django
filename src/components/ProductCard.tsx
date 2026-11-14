@@ -19,10 +19,31 @@ interface ProductCardProps {
 function Sello() {
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <span className="-rotate-12 rounded-md border-4 border-double border-sello bg-etiqueta/80 px-4 py-1 text-3xl font-black tracking-wide text-sello">
+      <span className="-rotate-12 rounded-md border-4 border-double border-sello bg-etiqueta/80 px-4 py-1 text-3xl font-black tracking-wide text-sello motion-safe:animate-[estampar_0.5s_cubic-bezier(0.2,0.8,0.3,1)_0.15s_backwards]">
         PILLADO
       </span>
     </div>
+  )
+}
+
+const PRIORITY_LABEL = { alta: 'Mucha ilusión', media: 'Ilusión media', baja: 'Si se puede' } as const
+
+export const formatPrice = (price: number): string =>
+  `${new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 }).format(price)} €`
+
+/** Precio aproximado y prioridad, siempre con texto (no solo color). */
+function PriceAndPriority({ price, priority }: Pick<ProductoView, 'price' | 'priority'>) {
+  if (price === null && priority === null) return null
+  return (
+    <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-base text-tinta">
+      {price !== null && <span>Unos {formatPrice(price)}</span>}
+      {priority !== null && (
+        <span className="rounded-full border-2 border-tinta/60 px-2.5 py-0.5 text-sm font-semibold">
+          {priority === 'alta' ? '★ ' : ''}
+          {PRIORITY_LABEL[priority]}
+        </span>
+      )}
+    </p>
   )
 }
 
@@ -47,6 +68,7 @@ export function ProductCard({ product, corner, showOwner = false, children }: Pr
           <h3 className="text-center font-hand text-3xl leading-8 text-tinta [overflow-wrap:anywhere]">
             {product.name}
           </h3>
+          <PriceAndPriority price={product.price} priority={product.priority} />
           {showOwner && product.ownerUsername && (
             <p className="text-center text-base text-tinta/80 [overflow-wrap:anywhere]">
               Para {product.ownerUsername}

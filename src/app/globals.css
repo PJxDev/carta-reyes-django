@@ -11,11 +11,64 @@
 
   --color-noche: #1b2559;
   --color-oro: #f5b93b;
-  --color-tinta: #3b2a1e;
-  --color-etiqueta: #fffaf0;
+  --color-tinta: #3b2a1e; /* tinta sobre papel: no cambia con el tema */
   --color-sello: #b91c1c;
 
+  /* Estos sí cambian con el tema (ver :root más abajo) */
+  --color-etiqueta: var(--papel);
+  --color-fondo: var(--fondo);
+  --color-texto: var(--texto);
+  --color-seccion-verde: var(--seccion-verde);
+  --color-seccion-azul: var(--seccion-azul);
+  --color-seccion-rosa: var(--seccion-rosa);
+
   --animate-twinkle: twinkle 4s ease-in-out infinite;
+}
+
+/*
+ * Temas. Claro por defecto. El modo oscuro es "noche": el fondo y las secciones
+ * se oscurecen, pero las etiquetas, la carta y los formularios siguen siendo
+ * papel con tinta oscura, como papeles sobre una mesa de noche.
+ * `data-theme` lo pone el interruptor (src/components/ThemeToggle.tsx); sin él se
+ * sigue la preferencia del sistema.
+ */
+:root {
+  color-scheme: light;
+  --fondo: #ffedd5;
+  --texto: #3b2a1e;
+  --papel: #fffaf0;
+  --papel-carta: #fffbeb;
+  --seccion-verde: rgb(209 250 229 / 0.8);
+  --seccion-azul: rgb(219 234 254 / 0.9);
+  --seccion-rosa: rgb(252 231 243 / 0.9);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --fondo: #0f1432;
+  --texto: #f6ead3;
+  --papel: #f4e8cc;
+  --papel-carta: #f2e6c4;
+  --seccion-verde: #12372f;
+  --seccion-azul: #18285a;
+  --seccion-rosa: #3b1f3a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --fondo: #0f1432;
+    --texto: #f6ead3;
+    --papel: #f4e8cc;
+    --papel-carta: #f2e6c4;
+    --seccion-verde: #12372f;
+    --seccion-azul: #18285a;
+    --seccion-rosa: #3b1f3a;
+  }
+}
+
+html {
+  background-color: var(--fondo);
 }
 
 @keyframes twinkle {
@@ -30,7 +83,29 @@
   }
 }
 
+/* El sello se estampa una vez al cargar la página; es el único movimiento "decorativo". */
+@keyframes estampar {
+  0% {
+    opacity: 0;
+    transform: rotate(-12deg) scale(1.7);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-12deg) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-12deg) scale(1);
+  }
+}
+
 @layer base {
+  /* Cualquier cosa que sea papel lleva tinta oscura, también en modo oscuro */
+  .bg-etiqueta,
+  .papel-carta {
+    color: var(--color-tinta);
+  }
+
   /* Tailwind 4 ya no pone cursor:pointer en los botones */
   button:not(:disabled),
   [role='button']:not(:disabled) {
@@ -42,10 +117,14 @@
     border: 1px solid grey;
   }
 
-  /* Foco visible para navegación con teclado, con contraste sobre cualquier fondo */
-  :where(a, button, input, textarea, [tabindex]):focus-visible {
+  /*
+   * Foco visible: anillo azul con halo blanco. El azul destaca sobre papel y el
+   * blanco sobre fondos oscuros, así se ve en ambos temas.
+   */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
     outline: 3px solid #1d4ed8;
-    outline-offset: 3px;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px #fff;
   }
 
   /* Los diálogos nativos no se centran solos con el reset de Tailwind */
@@ -81,7 +160,7 @@
    */
   .papel-carta {
     --margen: 1.75rem;
-    background-color: #fffbeb;
+    background-color: var(--papel-carta);
     background-image:
       linear-gradient(
         to right,
@@ -103,5 +182,16 @@
     .papel-carta {
       --margen: 3.5rem;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

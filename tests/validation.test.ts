@@ -68,7 +68,7 @@ test('validateProductoInput recorta y valida', () => {
   })
   assert.deepEqual(ok, {
     ok: true,
-    value: { name: 'Bici', description: 'roja', links: ['https://a.com'], images: [] }
+    value: { name: 'Bici', description: 'roja', links: ['https://a.com'], images: [], price: null, priority: null }
   })
   assert.equal(validateProductoInput({ name: '   ' }).ok, false)
   assert.equal(validateProductoInput({}).ok, false)

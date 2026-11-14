@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import type { Table } from '../store/table.ts'
 import type { Producto, ProductoInput } from '../types.ts'
-import { productoToRow, rowToProducto, serializeList } from './mappers.ts'
+import { productoToRow, rowToProducto, serializeList, serializePrice } from './mappers.ts'
 
 export type UpdateResult = 'ok' | 'not_found' | 'forbidden'
 export type PillarResult = 'ok' | 'not_found' | 'own_product' | 'taken'
@@ -64,7 +64,9 @@ export function createProductosRepo(table: Table): ProductosRepo {
               name: input.name,
               description: input.description,
               links: serializeList(input.links),
-              images: serializeList(input.images)
+              images: serializeList(input.images),
+              price: serializePrice(input.price),
+              priority: input.priority ?? ''
             }
           : null
       )

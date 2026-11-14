@@ -5,7 +5,7 @@ import { createSheetsApi } from '../sheets/api.ts'
 import { createTokenProvider } from '../sheets/google-auth.ts'
 import type { Backend } from './backend.ts'
 import { createMemoryBackend } from './memory-backend.ts'
-import { ALL_TABLES, PRODUCTOS, USUARIOS } from './schema.ts'
+import { ALL_TABLES, PRODUCTOS, SEGUIDOS, USUARIOS } from './schema.ts'
 import { createSheetsBackend } from './sheets-backend.ts'
 import { createMutex, createTable } from './table.ts'
 import type { Table } from './table.ts'
@@ -13,6 +13,7 @@ import type { Table } from './table.ts'
 export interface Store {
   usuarios: Table
   productos: Table
+  seguidos: Table
 }
 
 /** Une un backend con las tablas del esquema. Todas las escrituras comparten cola. */
@@ -20,7 +21,8 @@ export function createStore(backend: Backend): Store {
   const mutex = createMutex()
   return {
     usuarios: createTable(backend, USUARIOS, mutex),
-    productos: createTable(backend, PRODUCTOS, mutex)
+    productos: createTable(backend, PRODUCTOS, mutex),
+    seguidos: createTable(backend, SEGUIDOS, mutex)
   }
 }
 

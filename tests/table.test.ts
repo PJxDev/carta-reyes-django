@@ -7,9 +7,11 @@ import { createMemoryBackend } from '../src/lib/store/memory-backend.ts'
 import { ALL_TABLES, USUARIOS } from '../src/lib/store/schema.ts'
 import { SchemaError, createMutex, createTable } from '../src/lib/store/table.ts'
 
+const BASICO = { name: 'usuarios', columns: ['id', 'username', 'password_hash', 'created_at'] } as const
+
 const setup = (rows: string[][]) => {
   const backend = createMemoryBackendWith({ usuarios: rows })
-  return { backend, table: createTable(backend, USUARIOS, createMutex()) }
+  return { backend, table: createTable(backend, BASICO, createMutex()) }
 }
 
 function createMemoryBackendWith(data: Record<string, string[][]>) {

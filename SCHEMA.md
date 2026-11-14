@@ -2,7 +2,7 @@
 
 > **Estado:** implementado en la fase 2 (`src/lib/store/schema.ts` es la fuente de verdad).
 
-La "base de datos" es **un único libro de Google Sheets con dos pestañas**. La
+La "base de datos" es **un único libro de Google Sheets con tres pestañas**. La
 primera fila de cada pestaña contiene los nombres de columna; cada fila
 siguiente es un registro.
 
@@ -16,6 +16,9 @@ Equivale a `django.contrib.auth.User`.
 | `username` | texto | sí | Nombre de usuario, **siempre en minúsculas**. Es único y forma la URL pública (`/<username>`). |
 | `password_hash` | texto | sí | Hash de la contraseña (ver más abajo). Nunca se guarda la contraseña. |
 | `created_at` | fecha ISO 8601 (UTC) | sí | Fecha de alta. |
+| `email` | texto (≤ 254) | no | Email para recuperar la contraseña, en minúsculas. Único entre usuarios. Vacío = sin email. *(fase 6)* |
+| `reset_hash` | texto | no | SHA-256 (hex) del secreto del enlace de recuperación vigente. Vacío = ninguno. El secreto nunca se guarda. *(fase 6)* |
+| `reset_expires` | fecha ISO 8601 (UTC) | no | Cuándo caduca el enlace (1 hora). Con `reset_hash` vacío no importa. *(fase 6)* |
 
 ## Pestaña `productos`
 
@@ -31,6 +34,21 @@ Equivale al modelo `cartas.Producto`.
 | `images` | JSON | no | Lista de URLs de imagen, mismo formato que `links`. |
 | `created_at` | fecha ISO 8601 (UTC) | sí | Fecha de creación. |
 | `pillado_user_id` | texto | no | `usuarios.id` de quien ha "pillado" el regalo. Vacío = disponible. |
+| `price` | número | no | Precio aproximado en euros (0–100000, hasta 2 decimales, punto decimal). Vacío = sin precio. Si se edita a mano se tolera la coma. *(fase 6)* |
+| `priority` | `alta` \| `media` \| `baja` | no | Cuánta ilusión hace. Vacío o cualquier otro valor = sin indicar. *(fase 6)* |
+
+## Pestaña `seguidos` *(fase 6)*
+
+Qué cartas sigue cada usuario. Una fila por pareja.
+
+| Columna | Tipo | Obligatoria | Descripción |
+| ------- | ---- | ----------- | ----------- |
+| `id` | texto | sí | `<user_id>:<followed_id>`. Hace imposible duplicar una pareja. |
+| `user_id` | texto | sí | `usuarios.id` de quien sigue. |
+| `followed_id` | texto | sí | `usuarios.id` del dueño de la carta seguida. |
+| `created_at` | fecha ISO 8601 (UTC) | sí | Cuándo empezó a seguirla. |
+
+Las cartas **visitadas** no están en la hoja: viven en el navegador de cada persona.
 
 ## Equivalencia con los modelos de Django
 
@@ -57,6 +75,9 @@ las garantiza el código de la fase 2/3:
 4. Un producto solo lo puede editar o borrar su autor.
 5. Un producto solo puede pillarlo alguien que no sea el autor y solo si está
    libre; solo quien lo pilló puede liberarlo.
+6. Nadie puede seguirse a sí mismo; seguir y dejar de seguir son idempotentes.
+7. Un email pertenece como mucho a una cuenta (comprobación de mejor esfuerzo).
+8. Las rutas reservadas incluyen también `siguiendo`, `cuenta`, `recuperar` y `restablecer`.
 
 ## Contraseñas
 

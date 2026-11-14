@@ -11,7 +11,7 @@ export interface TableSchema {
 
 export const USUARIOS: TableSchema = {
   name: 'usuarios',
-  columns: ['id', 'username', 'password_hash', 'created_at']
+  columns: ['id', 'username', 'password_hash', 'created_at', 'email', 'reset_hash', 'reset_expires']
 }
 
 export const PRODUCTOS: TableSchema = {
@@ -24,8 +24,16 @@ export const PRODUCTOS: TableSchema = {
     'links',
     'images',
     'created_at',
-    'pillado_user_id'
+    'pillado_user_id',
+    'price',
+    'priority'
   ]
 }
 
-export const ALL_TABLES: readonly TableSchema[] = [USUARIOS, PRODUCTOS]
+/** Qué cartas sigue cada usuario. `id` es `<user_id>:<followed_id>` y evita duplicados. */
+export const SEGUIDOS: TableSchema = {
+  name: 'seguidos',
+  columns: ['id', 'user_id', 'followed_id', 'created_at']
+}
+
+export const ALL_TABLES: readonly TableSchema[] = [USUARIOS, PRODUCTOS, SEGUIDOS]
