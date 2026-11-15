@@ -44,7 +44,14 @@ const toView = (p: Producto, status: PillStatus, ownerUsername?: string): Produc
 
 export type CartaPage =
   | { found: false }
-  | { found: true; owner: { username: string }; isOwner: boolean; productos: ProductoView[] }
+  | {
+      found: true
+      owner: { username: string }
+      isOwner: boolean
+      /** ¿El visitante (con sesión, y distinto del dueño) sigue esta carta? */
+      isFollowing: boolean
+      productos: ProductoView[]
+    }
 
 /** Carta pública de `/<username>`. */
 export async function loadCarta(
@@ -59,6 +66,7 @@ export async function loadCarta(
     found: true,
     owner: { username: owner.username },
     isOwner: viewer?.id === owner.id,
+    isFollowing: viewer && viewer.id !== owner.id ? await repos.seguidos.isFollowing(viewer.id, owner.id) : false,
     productos: productos.map((p) => toView(p, statusFor(p, viewer)))
   }
 }

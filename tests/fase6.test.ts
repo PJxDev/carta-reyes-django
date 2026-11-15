@@ -10,6 +10,7 @@ import {
   requestPasswordReset,
   resetPasswordWithToken
 } from '../src/lib/services/recovery.ts'
+import { loadCarta } from '../src/lib/services/cartas.ts'
 import { checkImage, MAX_IMAGE_BYTES } from '../src/lib/uploads/images.ts'
 import { parsePrice, parsePriority, validateEmail, validateProductoInput } from '../src/lib/validation.ts'
 import { PRODUCT_INPUT, makeRepos } from './support/helpers.ts'
@@ -180,4 +181,22 @@ test('seguidos: seguir es idempotente, no se puede seguir a uno mismo y se orden
   await repos.seguidos.unfollow(usuario.id, b.usuario.id)
   await repos.seguidos.unfollow(usuario.id, b.usuario.id)
   assert.deepEqual((await repos.seguidos.listFollowed(usuario.id)).map((s) => s.followedId), [c.usuario.id])
+})
+
+test('loadCarta: isFollowing refleja si el visitante sigue la carta (y nunca para el dueño o un invitado)', async () => {
+  const { repos, usuario: duena } = await ana()
+  const bea = await repos.usuarios.create({ username: 'bea', passwordHash: 'h' })
+  assert.ok(bea.status === 'created')
+  const flag = async (viewer: typeof duena | null) => {
+    const page = await loadCarta(repos, 'ana', viewer)
+    assert.ok(page.found)
+    return page.isFollowing
+  }
+  assert.equal(await flag(null), false)
+  assert.equal(await flag(bea.usuario), false)
+  await repos.seguidos.follow(bea.usuario.id, duena.id)
+  assert.equal(await flag(bea.usuario), true)
+  assert.equal(await flag(duena), false)
+  await repos.seguidos.unfollow(bea.usuario.id, duena.id)
+  assert.equal(await flag(bea.usuario), false)
 })

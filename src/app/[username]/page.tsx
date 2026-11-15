@@ -34,8 +34,7 @@ export default async function CartaPage({ params }: Props) {
   const viewer = await getCurrentUser()
   const carta = await loadCarta(getRepos(), decodeURIComponent(username), viewer)
   if (!carta.found) notFound()
-  const own = viewer?.id === carta.owner.id
-  const following = viewer && !own ? await getRepos().seguidos.isFollowing(viewer.id, carta.owner.id) : false
+  const own = carta.isOwner
 
   return (
     <>
@@ -44,7 +43,7 @@ export default async function CartaPage({ params }: Props) {
       <section className="flex min-w-full flex-1 flex-col items-center justify-center gap-5 bg-seccion-azul p-4 text-texto sm:p-7">
         <h2 className="max-w-full text-center font-header text-3xl [overflow-wrap:anywhere]">Carta de {carta.owner.username}:</h2>
         <div className="flex flex-col items-center gap-3">
-          {viewer && !own && <FollowButton username={carta.owner.username} following={following} />}
+          {viewer && !own && <FollowButton username={carta.owner.username} following={carta.isFollowing} />}
           <ShareCarta
             path={`/${carta.owner.username}`}
             text={own ? 'Mira mi carta a los Reyes Magos:' : `La carta de ${carta.owner.username} a los Reyes Magos:`}
