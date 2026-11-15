@@ -202,8 +202,9 @@ sello «PILLADO» que se estampa una vez al cargar y una línea de pie para Melc
 **Qué falta por verificar.** No se ha podido ejecutar `next build` ni probar con servicios
 reales: Resend, Vercel Blob (se usa `@vercel/blob`, declarado como `>=1.0.0`; fija la
 versión que instales), la imagen Open Graph (`next/og`) y Google Sheets. Los `.tsx` se han
-compilado con esbuild y probado en Chromium, pero no pasan por `tsc` en este entorno
-(sí `src/lib`, `scripts` y `tests`). Conviene ejecutar `npm run typecheck && npm run build`.
+compilado con esbuild, probado en Chromium y comprobado con `tsc` contra tipos mínimos de
+React y Next (no los reales, que no se podían instalar). Conviene ejecutar
+`npm run typecheck && npm run build` con las dependencias reales.
 
 **Límites conocidos.** No hay límite de intentos en el login ni de subidas por usuario;
 las sesiones ya abiertas siguen valiendo tras cambiar la contraseña (la cookie es

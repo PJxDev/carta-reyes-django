@@ -96,7 +96,7 @@ carta-reyes/
 │       ├── repos/               usuarios, productos, seguidos, mappers      (2,6)
 │       └── import/django-dump.ts Importador de dumpdata                     (2)
 ├── scripts/                     sheet:setup e import:django                 (2)
-├── tests/                       95 tests + simulador de Google              (2,3,6)
+├── tests/                       96 tests + simulador de Google              (2,3,6)
 ```
 
 ## Convenciones
