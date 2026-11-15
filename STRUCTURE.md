@@ -38,6 +38,7 @@ carta-reyes/
 │   │       └── seguidos.ts      followAction                                (6)
 │   ├── components/
 │   │   ├── SiteHeader.tsx       Navegación (según sesión), título, imagen   (1,3)
+│   │   ├── NavMenu.tsx          Menú hamburguesa de la cabecera             (7)
 │   │   ├── Hero.tsx             Portada ilustrada (SVG) o foto opcional     (5)
 │   │   ├── SiteFooter.tsx       Pie de página                               (1)
 │   │   ├── icons.tsx            Iconos SVG compartidos                      (1,3)

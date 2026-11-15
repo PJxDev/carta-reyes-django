@@ -6,6 +6,9 @@
  * Las variables de fuente las define next/font en layout.tsx.
  */
 @theme inline {
+  /* Desde este ancho caben en una fila todos los botones de la barra (con sesión iniciada son 6). */
+  --breakpoint-nav: 75rem;
+
   --font-header: var(--font-pacifico), cursive;
   --font-hand: var(--font-shadows), cursive;
 
