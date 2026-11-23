@@ -19,6 +19,8 @@ repitan.
 | 4 | Auditoría de responsive y corrección de fallos de diseño; retirada del código Django | ✅ hecha |
 | 5 | Mejora de diseño conservando la identidad: etiquetas de regalo, carta en papel pautado, portada ilustrada, sello de «PILLADO» | ✅ hecha |
 | 6 | Recuperar contraseña (email opcional + Resend), subida de imágenes (Vercel Blob), precio y prioridad, compartir (WhatsApp, vista previa), seguir cartas y visitadas recientes, modo oscuro, accesibilidad y detalles de Reyes | ✅ hecha (ver «Qué falta por verificar») |
+| 7 | Menú hamburguesa en la cabecera: se mantiene la barra naranja con botones de colores; por debajo de 1200 px los enlaces quedan tras un botón de menú | ✅ hecha |
+| 8 | Corrección de diálogos en iPhone (centrado sobre el viewport visual) y revisión de responsive en móviles, tablets y horizontal | ✅ hecha (comprobada en Chromium; falta probar en un iPhone real) |
 
 ## Stack
 
@@ -227,7 +229,9 @@ Fallos de la versión Django (verificados en su código) y cómo quedan:
 | Diálogo de edición con `h-[90vh]` fijo | Altura rígida; con teclado móvil o en horizontal el contenido quedaba inalcanzable | `max-h-[calc(100dvh-1.5rem)]` con scroll interno; el botón de cerrar queda fijo fuera del scroll |
 | Iconos de 30 px y botón "añadir" de 30 px | Objetivos táctiles pequeños | Todos los controles ≥ 44 px (`size-11`, `min-h-11`/`min-h-12`) |
 | "PILLAR"/"PILLADO" como texto sin botón | Zona de toque mínima | Botón de ancho completo y 44 px de alto |
-| Cabecera con 2 botones que no contemplaba más enlaces | Con más enlaces se rompía en filas desalineadas | Lista única centrada que envuelve en móvil; desde `md` el bloque de sesión va a la derecha |
+| Cabecera con 2 botones que no contemplaba más enlaces | Con más enlaces se rompía en filas desalineadas | Barra con «Inicio», tema y botón de menú; los enlaces se despliegan bajo la barra por debajo de 1200 px (`nav`) y desde ahí van en una fila con el bloque de sesión a la derecha |
+| Diálogos desplazados en iPhone (centrado nativo de `<dialog>` + teclado, barra de direcciones y zoom) | Con el teclado abierto o tras hacer zoom el diálogo quedaba medio fuera de la pantalla | `Modal` es una capa que sigue a `visualViewport` y centra la tarjeta dentro de lo visible; se restaura el scroll al cerrar |
+| `min-h-screen` (100vh) en iOS | El pie quedaba bajo la barra de Safari | `min-h-dvh` |
 | Nombres/descripciones sin palabras cortables | Una palabra larga desbordaba la tarjeta | `overflow-wrap:anywhere` en títulos, descripciones y nombres de usuario |
 | Productos sin imagen → `<img src="">` | Icono de imagen rota | Hueco con un regalo; lo mismo si la imagen falla al cargar |
 | Carrusel sin etiquetas y con flechas de texto pequeñas | No accesible | Botones de 40 px con `aria-label`, contador "1/3" y rol de carrusel |

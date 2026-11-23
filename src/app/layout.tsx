@@ -49,7 +49,7 @@ export default function RootLayout({
         >
           Saltar al contenido
         </a>
-        <div className="bg-fondo min-h-screen flex flex-col">
+        <div className="bg-fondo min-h-screen min-h-dvh flex flex-col">
           <SiteHeader />
           <main id="contenido" tabIndex={-1} className="flex flex-col flex-1 justify-center items-center outline-none">
             {children}
