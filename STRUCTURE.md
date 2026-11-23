@@ -42,7 +42,7 @@ carta-reyes/
 │   │   ├── Hero.tsx             Portada ilustrada (SVG) o foto opcional     (5)
 │   │   ├── SiteFooter.tsx       Pie de página                               (1)
 │   │   ├── icons.tsx            Iconos SVG compartidos                      (1,3)
-│   │   ├── Modal.tsx            <dialog> nativo reutilizable                (3)
+│   │   ├── Modal.tsx            <dialog> nativo reutilizable, sigue al viewport (3,8)
 │   │   ├── ConfirmDialog.tsx    Confirmaciones Sí/No                        (3)
 │   │   ├── ProductCard.tsx      Tarjeta y rejilla de productos              (3)
 │   │   ├── EditableCard.tsx     Tarjeta del editor (editar/borrar)          (3)

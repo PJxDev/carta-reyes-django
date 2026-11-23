@@ -130,18 +130,50 @@ html {
     box-shadow: 0 0 0 6px #fff;
   }
 
-  /* Los diálogos nativos no se centran solos con el reset de Tailwind */
-  dialog {
-    margin: auto;
+  /*
+   * Diálogos: capa transparente a pantalla completa que centra la tarjeta (ver Modal.tsx).
+   * Las variables --modal-* las rellena Modal con visualViewport; sin ellas (o sin JS)
+   * se usa la ventana entera.
+   */
+  dialog.modal {
+    position: fixed;
+    inset: auto;
+    top: var(--modal-top, 0px);
+    left: var(--modal-left, 0px);
+    width: var(--modal-w, 100%);
+    height: var(--modal-h, 100%);
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0.75rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    overflow: hidden;
+  }
+
+  dialog.modal[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   dialog::backdrop {
     background: rgba(59, 42, 30, 0.55);
   }
 
-  /* Bloquea el scroll del fondo mientras haya un diálogo abierto */
+  /* Bloquea el scroll del fondo mientras haya un diálogo abierto (html y body: iOS mira al html) */
+  html:has(dialog[open]),
   body:has(dialog[open]) {
     overflow: hidden;
+  }
+
+  /* Reserva el hueco de la barra de scroll para que la página no salte al abrir un diálogo */
+  html {
+    scrollbar-gutter: stable;
+    /* iPhone en horizontal agranda el texto por su cuenta; así se respeta el tamaño del diseño */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 }
 
